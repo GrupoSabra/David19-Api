@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using System.Net.Http;
 
-namespace covid_la_map.Extensions
+namespace CovidLAMap.Extensions
 {
     public static class SpaBuilderExtensions
     {

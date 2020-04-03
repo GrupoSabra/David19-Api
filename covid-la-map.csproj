@@ -10,7 +10,8 @@
 
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
-    <RootNamespace>covid_la_map</RootNamespace>
+    <RootNamespace>CovidLAMap</RootNamespace>
+    <AssemblyName>CovidLAMap</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,6 @@
 using System;
 
-namespace covid_la_map
+namespace CovidLAMap
 {
     public class WeatherForecast
     {

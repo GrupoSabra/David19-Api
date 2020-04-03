@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace covid_la_map.Controllers
+namespace CovidLAMap.Controllers
 {
     [ApiController]
     [Route("[controller]")]

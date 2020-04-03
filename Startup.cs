@@ -1,4 +1,4 @@
-using covid_la_map.Extensions;
+using CovidLAMap.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace covid_la_map
+namespace CovidLAMap
 {
     public class Startup
     {
