@@ -1,3 +1,4 @@
+using covid_la_map.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,8 @@ namespace covid_la_map
 {
     public class Startup
     {
+        const string spaDevUrl = "http://localhost:4200/";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -62,12 +65,11 @@ namespace covid_la_map
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
-
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseAngularCliServer(npmScript: "start");
+                    spa.CheckAndStartAngular(spaDevUrl);
                 }
             });
         }
