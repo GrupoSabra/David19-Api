@@ -1,3 +1,28 @@
 <div style="height: 600px;" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)" [leafletMarkerCluster]="markerClusterData" [leafletMarkerClusterOptions]="markerClusterOptions" (leafletMarkerClusterReady)="markerClusterReady($event)">
 </div>
 <!--[leafletLayers]="layers"-->
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">País</th>
+            <th scope="col">Total reportados</th>
+            <th scope="col">Confinamiento</th>
+            <th scope="col">Interrumpido</th>
+            <th scope="col">Con Sintomas</th>
+            <th scope="col">Infectados</th>
+            <th scope="col">En Recupero</th>
+        </tr>
+    </thead>
+    <tbody *ngFor="let country of credsByCountryCount.keys(); index as i">
+        <tr>
+            <th scope="row">{{country}}</th>
+            <td>{{credsByCountryCount[country].total}}</td>
+            <td>{{credsByCountryCount[country].Confinement}}</td>
+            <td>{{credsByCountryCount[country].Interruption}}</td>
+            <td>{{credsByCountryCount[country].Symptoms}}</td>
+            <td>{{credsByCountryCount[country].Infection}}</td>
+            <td>{{credsByCountryCount[country].Recovery}}</td>
+        </tr>
+    </tbody>
+</table>
