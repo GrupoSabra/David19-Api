@@ -37,7 +37,7 @@ namespace CovidLAMap.Data.Repositories
             return await Context.Set<TEntity>().ToListAsync();
         }
 
-        public Task<TEntity> GetByIdAsync(int id)
+        public Task<TEntity> GetByIdAsync(long id)
         {
             return Context.Set<TEntity>().FindAsync(id).AsTask();
         }

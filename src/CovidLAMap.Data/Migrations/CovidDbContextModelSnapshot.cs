@@ -21,12 +21,10 @@ namespace CovidLAMap.Data.Migrations
                 .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("CovidLaMap.Core.Models.RegisteredCredential", b =>
+            modelBuilder.Entity("CovidLAMap.Core.Models.RegisteredCredential", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                    b.Property<string>("HashId")
+                        .HasColumnType("text");
 
                     b.Property<string>("CitizenAddress")
                         .HasColumnType("text");
@@ -37,14 +35,18 @@ namespace CovidLAMap.Data.Migrations
                     b.Property<int>("CredintialType")
                         .HasColumnType("integer");
 
-                    b.Property<string>("HashId")
-                        .HasColumnType("text");
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<double>("Lat")
+                        .HasColumnType("double precision");
 
                     b.Property<Point>("Location")
-                        .HasColumnType("geometry");
+                        .HasColumnType("geometry(POINT, 4326)");
 
-                    b.Property<string>("OriginalLocation")
-                        .HasColumnType("text");
+                    b.Property<double>("Lon")
+                        .HasColumnType("double precision");
 
                     b.Property<int>("Reason")
                         .HasColumnType("integer");
@@ -58,7 +60,7 @@ namespace CovidLAMap.Data.Migrations
                     b.Property<string>("SubjectHashId")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("HashId");
 
                     b.ToTable("RegisteredCredentials");
                 });

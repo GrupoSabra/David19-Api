@@ -2,10 +2,15 @@ using CovidLAMap.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NetTopologySuite.Geometries;
 
 namespace CovidLAMap.Web
 {
@@ -23,7 +28,18 @@ namespace CovidLAMap.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options => {
+                options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Point)));
+                options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Coordinate)));
+                options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(LineString)));
+                options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(MultiLineString)));
+            }).AddNewtonsoftJson(options => {
+                foreach (var converter in NetTopologySuite.IO.GeoJsonSerializer.Create(new GeometryFactory(new PrecisionModel(), 4326)).Converters)
+                {
+                    options.SerializerSettings.Converters.Add(converter);
+                }
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            //services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
                 // In production, the Angular files will be served from this directory
@@ -76,7 +92,8 @@ namespace CovidLAMap.Web
 
             using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = serviceScope.ServiceProvider.GetService<CovidLAMap.Data.CovidDbContext>();
-            context.Database.EnsureCreated();
+            var tableCreator = context.Database.GetService<IRelationalDatabaseCreator>();
+            //tableCreator.CreateTables();
         }
     }
 }

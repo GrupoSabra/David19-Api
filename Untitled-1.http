@@ -1,0 +1,56 @@
+POST http://localhost:5000/ethevent/import HTTP/1.1
+Content-Type: application/json
+
+{"name":"CredentialRegistered",
+   "filterId":"CredentialRegistered1",
+   "nodeName":"default",
+   "indexedParameters":[
+      {
+         "type":"bytes32",
+         "value":"0x1a906fa6137e4325646e8f8814c4f719345d50c1bb056fcf78a2b031a6a584e0"
+      }
+   ],
+   "nonIndexedParameters":[
+      {
+         "type":"address",
+         "value":"0xbcEda2Ba9aF65c18C7992849C312d1Db77cF008E"
+      },
+      {
+         "type":"bytes32",
+         "value":"0x1a906fa6137e4325646e8f8814c4f719345d50c1bb056fcf78a2a031a6a584e1"
+      },
+      {
+         "type":"uint256",
+         "value":1234567
+      },
+      {
+         "type":"uint256",
+         "value":1585938
+      },
+      {
+         "type":"uint8",
+         "value":0
+      },
+      {
+         "type":"string",
+         "value": "69uzjy"
+      },
+      {
+         "type":"uint8",
+         "value":1
+      },
+      {
+         "type":"uint8",
+         "value":0
+      }
+   ],
+   "transactionHash":"0xe88a5b0500428e6d3142ee319aa85b4b9b09c7d43ba81a804757211b4c21cfea",
+   "logIndex":0,
+   "blockNumber":9258975,
+   "blockHash":"0x28b47b90aa7a80fc52b737764ad01743aaefd57cddb55cdd90d59e6a7043fdab",
+   "address":"0x9938D9B7777039915212C58AD3A5E11aa17914cD",
+   "status":"UNCONFIRMED",
+   "eventSpecificationSignature":"0xecc12381e0063d9598f95e753b7344f25ac715cb3a8abb99351037d88e1916d5",
+   "networkName":"default",
+   "id":"0xe88a5b0500428e6d3142ee319aa85b4b9b09c7d43ba81a804757211b4c21cfea-0x28b47b90aa7a80fc52b737764ad01743aaefd57cddb55cdd90d59e6a7043fdab-0"
+}

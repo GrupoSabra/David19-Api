@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CovidLAMap.Core;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,6 +13,8 @@ namespace CovidLAMap.Data
     
         public static void SetupDataDependencies(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<ICovidUnitOfWork, CovidUnitOfWork>();
+            
             services.AddDbContext<CovidDbContext>(options =>
                options.UseNpgsql(configuration.GetConnectionString("Default"),
               x => { 

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CovidLAMap.Web.ApiModels
+namespace CovidLAMap.Core.DTOs
 {
-    public class EthEvent
+    public class EthEventDTO
     {
-        public List<EthValue> IndexedParameters { get; set; }
-        public List<EthValue> NonIndexedParameters { get; set; }
+        public List<EthValueDTO> IndexedParameters { get; set; }
+        public List<EthValueDTO> NonIndexedParameters { get; set; }
         public string Name { get; set; }
         public string FilterId { get; set; }
         public string NodeName { get; set; }
@@ -23,9 +23,10 @@ namespace CovidLAMap.Web.ApiModels
         public string Id { get; set; }
     }
 
-    public class EthValue
+    public class EthValueDTO
     {
+        public long Id { get; set; }
         public string Type { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
     }
 }

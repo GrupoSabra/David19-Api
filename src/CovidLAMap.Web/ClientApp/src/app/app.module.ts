@@ -8,8 +8,8 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletMarkerClusterModule } from "@asymmetrik/ngx-leaflet-markercluster";
 
 @NgModule({
   declarations: [
@@ -17,17 +17,15 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    LeafletModule.forRoot(),
+    LeafletModule.forRoot(), LeafletMarkerClusterModule.forRoot(),
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'counter', component: CounterComponent }
     ])
   ],
   providers: [],

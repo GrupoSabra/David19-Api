@@ -1,4 +1,5 @@
 ﻿using CovidLAMap.Data;
+using CovidLAMap.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,8 @@ namespace CovidLAMap.Services
         public static void SetupServicesDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.SetupDataDependencies(configuration);
+            services.AddHttpClient<IGeoService, GeoService>();
+            services.AddTransient<ICredentialService, CredentialService>();
         }
     }
 }
