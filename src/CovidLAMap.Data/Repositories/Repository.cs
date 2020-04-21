@@ -1,5 +1,6 @@
 ﻿using CovidLAMap.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +56,11 @@ namespace CovidLAMap.Data.Repositories
         public Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return Context.Set<TEntity>().SingleOrDefaultAsync(predicate);
+        }
+
+        public void UpdateAsync(TEntity entity)
+        {
+            Context.Update<TEntity>(entity);
         }
     }
 }

@@ -4,6 +4,8 @@ using CovidLAMap.Core.Models;
 using CovidLAMap.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 namespace CovidLAMap.Services
@@ -20,7 +22,11 @@ namespace CovidLAMap.Services
         {
             var credential = RegisteredCredential.From(ethEvent);
             try 
-            { 
+            {
+                var country = await this.covidUnitOfWork.Countries.SingleOrDefaultAsync(x => x.Geom.Contains(credential.Location));
+                var state = await this.covidUnitOfWork.States.SingleOrDefaultAsync(x => x.Geom.Contains(credential.Location));
+                credential.CountryGid = country.Gid;
+                credential.StateGid = state.Gid;
                 await covidUnitOfWork.Credentials.AddAsync(credential);
                 await covidUnitOfWork.CommitAsync();
             }
@@ -30,9 +36,17 @@ namespace CovidLAMap.Services
             }
         }
 
-        public async Task<List<RegisteredCredentialFat>> GetAllByCountryAsync()
+        public async Task RevokeCredential(EthEventDTO ethEvent)
         {
-            return await covidUnitOfWork.Credentials.GetCountAllByCountryAsync();
+            var hash = ethEvent.IndexedParameters[0].Value.ToString();
+            var credential = await covidUnitOfWork.Credentials
+                .SingleOrDefaultAsync(x => x.HashId == hash);
+            if(credential != null)
+            {
+                credential.IsRevoked = true;
+            }
+            covidUnitOfWork.Credentials.UpdateAsync(credential);
+            await covidUnitOfWork.CommitAsync();
         }
 
         public async Task<IEnumerable<RegisteredCredential>> GetAllAsync()

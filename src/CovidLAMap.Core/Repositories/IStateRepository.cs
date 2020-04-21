@@ -2,11 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CovidLAMap.Core.Repositories
 {
-    public interface IRegisteredCredentialRepository : IRepository<RegisteredCredential>
+    public interface IStateRepository : IRepository<State>
     {
     }
 }

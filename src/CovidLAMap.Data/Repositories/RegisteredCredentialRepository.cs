@@ -23,13 +23,13 @@ namespace CovidLAMap.Data.Repositories
             this.context = context;
         }
 
-        public async Task<List<RegisteredCredentialFat>> GetCountAllByCountryAsync()
-        {
-            var list = await this.context.CredentialsAggregated.FromSqlInterpolated(
-                $"SELECT rc.*, c.name_es as CountryName FROM public.\"Countries\" as c join \"RegisteredCredentials\" as rc on ST_Contains(c.geom, rc.\"Location\")"
-                ).ToListAsync();
-            return list;
-        }
+        //public async Task<List<RegisteredCredentialFat>> GetCountAllByCountryAsync()
+        //{
+        //    var list = await this.context.CredentialsAggregated.FromSqlInterpolated(
+        //        $"SELECT rc.*, c.name_es as CountryName FROM public.\"Countries\" as c join \"RegisteredCredentials\" as rc on ST_Contains(c.geom, rc.\"Location\")"
+        //        ).ToListAsync();
+        //    return list;
+        //}
     }
 }
 

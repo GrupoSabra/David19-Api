@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CovidLAMap.Core.Models
 {
-    public class RegisteredCredential : IRegisteredCredential
+    public class RegisteredCredential
     {
         public long Id { get; set; }
         public string HashId { get; set; }
@@ -21,6 +21,13 @@ namespace CovidLAMap.Core.Models
         public double Lon { get; set; }
         public CredentialType CredintialType { get; set; }
         public InterruptionReason Reason { get; set; }
+
+        public bool? IsRevoked { get; set; }
+        public int CountryGid { get; set; }
+        public int StateGid { get; set; }
+
+        public virtual Country Country { get; set; }
+        public virtual State State { get; set; }
 
         public static RegisteredCredential From(EthEventDTO eventDto)
         {
@@ -44,23 +51,6 @@ namespace CovidLAMap.Core.Models
             ret.Lon = ret.Location.Coordinate.Y;
             return ret;
         }
-    }
-
-    public class RegisteredCredentialFat : IRegisteredCredential
-    {
-        public string CountryName { get; set; }
-        public long Id { get; set; }
-        public string HashId { get; set; }
-        public string CitizenAddress { get; set; }
-        public string SubjectHashId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime CredentialCreation { get; set; }
-        public Sex Sex { get; set; }
-        public Point Location { get; set; }
-        public double Lat { get; set; }
-        public double Lon { get; set; }
-        public CredentialType CredintialType { get; set; }
-        public InterruptionReason Reason { get; set; }
     }
 
     public enum Sex

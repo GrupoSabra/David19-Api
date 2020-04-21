@@ -8,5 +8,7 @@ namespace CovidLAMap.Core
     public interface ICovidUnitOfWork : IUnitOfWork
     {
         IRegisteredCredentialRepository Credentials { get; }
+        ICountryRepository Countries { get; }
+        IStateRepository States { get; }
     }
 }

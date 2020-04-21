@@ -11,5 +11,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\CovidLAMap.Core\CovidLAMap.Core.csproj" />
+    <ProjectReference Include="..\..\CovidLAMap.Serivices\CovidLAMap.Services.csproj" />
+  </ItemGroup>
+
 
 </Project>

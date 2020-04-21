@@ -6,6 +6,11 @@ namespace CovidLAMap.Core.Models
 {
     public partial class Country
     {
+        public Country()
+        {
+            RegisteredCredentials = new HashSet<RegisteredCredential>();
+        }
+
         public int Gid { get; set; }
         public string Featurecla { get; set; }
         public short? Scalerank { get; set; }
@@ -102,5 +107,8 @@ namespace CovidLAMap.Core.Models
         public string NameVi { get; set; }
         public string NameZh { get; set; }
         public MultiPolygon Geom { get; set; }
+        public Geometry Centroid { get; set; }
+
+        public virtual ICollection<RegisteredCredential> RegisteredCredentials { get; set; }
     }
 }
