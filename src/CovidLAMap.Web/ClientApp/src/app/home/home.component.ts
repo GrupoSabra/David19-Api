@@ -68,11 +68,32 @@ export class HomeComponent implements OnInit {
 
    for (const country of credentialsByCountry.keys()) {
      const marks = credentialsByCountry[country];
-     const markers = markerClusterGroup({spiderLegPolylineOptions : { weight: 1.5, color: '#5D5E60', opacity: 0.5 }});
-     marks.forEach(element => {
-      markers.addLayer(element.mark);
+     const mInfection = markerClusterGroup({
+      iconCreateFunction: function(cluster) {
+        return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });
+      }});
+     const mConfinement = markerClusterGroup({spiderLegPolylineOptions : { weight: 1.5, color: '#5D5E60', opacity: 0.5 }});
+     const mInterruption = markerClusterGroup({spiderLegPolylineOptions : { weight: 1.5, color: '#5D5E60', opacity: 0.5 }});
+     const mRecovery = markerClusterGroup({spiderLegPolylineOptions : { weight: 1.5, color: '#5D5E60', opacity: 0.5 }});
+     const mSymptoms = markerClusterGroup({spiderLegPolylineOptions : { weight: 1.5, color: '#5D5E60', opacity: 0.5 }});
+     marks.forEach(e => {
+      if(e.credential.credintialType == CredentialType.Confinement)
+       mConfinement.addLayer(e.mark);
+      else if(e.credential.credintialType == CredentialType.Infection)
+        mInfection.addLayer(e.mark);
+      else if(e.credential.credintialType == CredentialType.Interruption)
+        mInterruption.addLayer(e.mark);
+      else if(e.credential.credintialType == CredentialType.Recovery)
+        mRecovery.addLayer(e.mark);
+      else if(e.credential.credintialType == CredentialType.Symptoms)
+        mSymptoms.addLayer(e.mark);
      });
-     this.myMap.addLayer(markers);
+
+     this.myMap.addLayer(mConfinement);
+     this.myMap.addLayer(mInfection);
+     this.myMap.addLayer(mInterruption);
+     this.myMap.addLayer(mRecovery);
+     this.myMap.addLayer(mSymptoms);
    }
 
    this.credsByCountryCount = typesByCountryCount;

@@ -12,6 +12,8 @@
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
     <RootNamespace>CovidLAMap.Web</RootNamespace>
     <AssemblyName>CovidLAMap.Web</AssemblyName>
+    <UserSecretsId>82b06196-223d-4b98-8d4b-0e40a4fc0da9</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +23,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="NetTopologySuite" Version="2.0.0" />
     <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="2.0.2" />

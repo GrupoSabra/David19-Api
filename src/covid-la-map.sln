@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CovidLAMap.Services", "Covi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CovidLAMap.Data", "CovidLAMap.Data\CovidLAMap.Data.csproj", "{123DCBFA-8A9D-4DFB-8FB3-D2FEF6C0D24D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CovidLAMap.API", "CovidLAMap.API\CovidLAMap.API\CovidLAMap.API.csproj", "{931E01BB-27E0-4D64-A67A-394732173CA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{123DCBFA-8A9D-4DFB-8FB3-D2FEF6C0D24D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{123DCBFA-8A9D-4DFB-8FB3-D2FEF6C0D24D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{123DCBFA-8A9D-4DFB-8FB3-D2FEF6C0D24D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{931E01BB-27E0-4D64-A67A-394732173CA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{931E01BB-27E0-4D64-A67A-394732173CA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{931E01BB-27E0-4D64-A67A-394732173CA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{931E01BB-27E0-4D64-A67A-394732173CA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

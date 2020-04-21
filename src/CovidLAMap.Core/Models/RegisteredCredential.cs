@@ -7,17 +7,6 @@ using System.Text;
 
 namespace CovidLAMap.Core.Models
 {
-    public class LatLon
-    {
-        public LatLon(double lat, double lon)
-        {
-            Lat = lat;
-            Lon = lon;
-        }
-        public double Lat { get; set; }
-        public double Lon { get; set; }
-    }
-
     public class RegisteredCredential : IRegisteredCredential
     {
         public long Id { get; set; }
@@ -32,7 +21,6 @@ namespace CovidLAMap.Core.Models
         public double Lon { get; set; }
         public CredentialType CredintialType { get; set; }
         public InterruptionReason Reason { get; set; }
-        //public string Country { get; set; }
 
         public static RegisteredCredential From(EthEventDTO eventDto)
         {
