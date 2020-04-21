@@ -49,6 +49,11 @@ namespace CovidLAMap.Services
             await covidUnitOfWork.CommitAsync();
         }
 
+        public async Task<IEnumerable<AgregationsByCountry>> GetByCountryAsync()
+        {
+            return await covidUnitOfWork.CountryAgregations.GetAllAsync();
+        }
+
         public async Task<IEnumerable<RegisteredCredential>> GetAllAsync()
         {
             return await covidUnitOfWork.Credentials.GetAllAsync();

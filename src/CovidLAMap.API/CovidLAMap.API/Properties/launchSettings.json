@@ -12,7 +12,7 @@
     "CovidLAMap.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "credentials/ByCountry",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

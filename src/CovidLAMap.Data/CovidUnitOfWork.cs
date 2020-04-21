@@ -14,10 +14,12 @@ namespace CovidLAMap.Data
         private RegisteredCredentialRepository credentialsRepository;
         private CountryRepository countryRepository;
         private StateRepository stateRepository;
+        private AgregationsByCountryRepository agregationsByCountry;
 
         public IRegisteredCredentialRepository Credentials => credentialsRepository ??= new RegisteredCredentialRepository(context);
         public ICountryRepository Countries => countryRepository ??= new CountryRepository(context);
         public IStateRepository States => stateRepository ??= new StateRepository(context);
+        public IAgregationsByCountryRepository CountryAgregations => agregationsByCountry ??= new AgregationsByCountryRepository(context); 
 
         public CovidUnitOfWork(CovidDbContext context)
         {

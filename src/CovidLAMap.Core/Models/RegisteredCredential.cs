@@ -19,7 +19,7 @@ namespace CovidLAMap.Core.Models
         public Point Location { get; set; }
         public double Lat { get; set; }
         public double Lon { get; set; }
-        public CredentialType CredintialType { get; set; }
+        public CredentialType CredentialType { get; set; }
         public InterruptionReason Reason { get; set; }
 
         public bool? IsRevoked { get; set; }
@@ -41,7 +41,7 @@ namespace CovidLAMap.Core.Models
                 StartDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(eventDto.NonIndexedParameters[2].Value.ToString())).DateTime,
                 CredentialCreation = DateTimeOffset.FromUnixTimeSeconds(long.Parse(eventDto.NonIndexedParameters[3].Value.ToString())).DateTime,
                 Sex = Enum.Parse<Sex>(eventDto.NonIndexedParameters[4].Value.ToString()),
-                CredintialType = Enum.Parse<CredentialType>(eventDto.NonIndexedParameters[6].Value.ToString()),
+                CredentialType = Enum.Parse<CredentialType>(eventDto.NonIndexedParameters[6].Value.ToString()),
                 Reason = Enum.Parse<InterruptionReason>(eventDto.NonIndexedParameters[7].Value.ToString())
             };
 

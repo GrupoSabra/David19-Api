@@ -10,5 +10,6 @@ namespace CovidLAMap.Core
         IRegisteredCredentialRepository Credentials { get; }
         ICountryRepository Countries { get; }
         IStateRepository States { get; }
+        IAgregationsByCountryRepository CountryAgregations { get; }
     }
 }

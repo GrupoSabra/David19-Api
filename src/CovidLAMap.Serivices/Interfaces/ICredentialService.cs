@@ -10,6 +10,7 @@ namespace CovidLAMap.Services.Interfaces
     public interface ICredentialService
     {
         Task<IEnumerable<RegisteredCredential>> GetAllAsync();
+        Task<IEnumerable<AgregationsByCountry>> GetByCountryAsync();
         Task ImportAsync(EthEventDTO ethEvent);
         Task RevokeCredential(EthEventDTO ethEvent);
     }

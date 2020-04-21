@@ -24,6 +24,7 @@ namespace CovidLAMap.Data
             modelBuilder.ApplyConfiguration(new RegisteredCredentialConfiguration());
             modelBuilder.ApplyConfiguration(new CountriesConfiguration());
             modelBuilder.ApplyConfiguration(new StatesConfiguration());
+            modelBuilder.ApplyConfiguration(new AgregationsByCountryConfiguration());
         }  
     }
 }
