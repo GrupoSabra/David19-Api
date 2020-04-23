@@ -20,7 +20,6 @@ namespace CovidLAMap.API.Controllers
     [ApiController]
     public class CredentialsController : ControllerBase
     {
-
         private readonly ILogger<EthEventController> _logger;
         private readonly ICredentialService _credentialService;
         private readonly IDistributedCache _cache;
@@ -53,7 +52,6 @@ namespace CovidLAMap.API.Controllers
             }, TimeSpan.FromMinutes(5));
         }
 
-
         [HttpGet("ByCountryCsv")]
         [ResponseCache(Duration = 300)]
         public async Task<ActionResult> ByCountryCsv()
@@ -79,6 +77,56 @@ namespace CovidLAMap.API.Controllers
                 }
             }, TimeSpan.FromMinutes(5));
             return File(System.Text.Encoding.UTF8.GetBytes(csv), "text/csv", "data.csv");
+        }
+
+        [HttpPost("query")]
+        [ResponseCache(Duration = 300)]
+        public async Task<ActionResult> Query(QueryCredentials queryCredentials)
+        {
+            try
+            {
+                if(queryCredentials.Lat.HasValue && queryCredentials.Lon.HasValue && queryCredentials.Radius.HasValue)
+                {
+                    var list = await _credentialService.GetPointsInCircle(queryCredentials.Lat.Value, queryCredentials.Lon.Value, queryCredentials.Radius.Value);
+                    return Ok(list);
+                }
+               
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                var guid = Guid.NewGuid();
+                _logger.LogError(e, $"Error on Post. Id: {guid}", null);
+                return StatusCode(500, $"Error Id {guid}");
+            }
+        }
+
+        [HttpPost("querycsv")]
+        [ResponseCache(Duration = 300)]
+        public async Task<ActionResult> QueryCsv(QueryCredentials queryCredentials)
+        {
+            try
+            {
+                if (queryCredentials.Lat.HasValue && queryCredentials.Lon.HasValue && queryCredentials.Radius.HasValue)
+                {
+                    var list = await _credentialService.GetPointsInCircle(queryCredentials.Lat.Value, queryCredentials.Lon.Value, queryCredentials.Radius.Value);
+                    var csvEnumerable = list.Select(x => CsvAgregationsByCountry.From(x));
+                    using var writer = new StringWriter();
+                    using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+                    csv.Configuration.RegisterClassMap<CsvAgregationsByCountryMap>();
+                    csv.WriteRecords(csvEnumerable);
+                    var finalCsv = writer.ToString();
+                    return File(System.Text.Encoding.UTF8.GetBytes(finalCsv), "text/csv", "data.csv");
+                }
+
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                var guid = Guid.NewGuid();
+                _logger.LogError(e, $"Error on Post. Id: {guid}", null);
+                return StatusCode(500, $"Error Id {guid}");
+            }
         }
     }
 }

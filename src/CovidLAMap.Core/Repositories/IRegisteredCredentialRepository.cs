@@ -8,5 +8,6 @@ namespace CovidLAMap.Core.Repositories
 {
     public interface IRegisteredCredentialRepository : IRepository<RegisteredCredential>
     {
+        Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms);
     }
 }

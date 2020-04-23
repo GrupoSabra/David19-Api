@@ -58,6 +58,11 @@ namespace CovidLAMap.Services
         {
             return await covidUnitOfWork.Credentials.GetAllAsync();
         }
+
+        public async Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms) 
+        {
+            return await covidUnitOfWork.Credentials.GetPointsInCircle(lat, lon, radiusKms);
+        }
     
     }
 }

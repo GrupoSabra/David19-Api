@@ -65,10 +65,10 @@ namespace CovidLAMap.Core.Models
             return ret;
         }
 
-        private static void SetSymptoms(RegisteredCredential ret, string bytes)
+        private static void SetSymptoms(RegisteredCredential ret, string bits)
         {
             if (ret.CredentialType != CredentialType.Symptoms) return;
-            var bytesR = bytes.ToCharArray().Reverse().ToArray();
+            var bytesR = bits.ToCharArray();
             if(bytesR[0] == '0')
             {
                 ret.HasNoSymptoms = true;

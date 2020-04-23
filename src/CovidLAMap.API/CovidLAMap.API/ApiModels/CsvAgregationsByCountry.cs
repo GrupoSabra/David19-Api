@@ -1,9 +1,11 @@
 ﻿using CovidLAMap.Core.Models;
 using CsvHelper.Configuration;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 namespace CovidLAMap.API.ApiModels
@@ -12,7 +14,7 @@ namespace CovidLAMap.API.ApiModels
     {
         public string type { get; set; }
         public double lat { get; set; }
-        public double longitud { get; set; }
+        public double lon { get; set; }
         public long usersCount { get; set; }
         public long transactionCount { get; set; }
         public long noSymptomsCount { get; set; }
@@ -55,8 +57,8 @@ namespace CovidLAMap.API.ApiModels
             var ret = new CsvAgregationsByCountry
             {
                 type = "cluster",
-                lat = byCountry.Centroid.Coordinates[0].X,
-                longitud = byCountry.Centroid.Coordinates[0].Y,
+                lat = byCountry.Centroid.Coordinates[0].Y,
+                lon = byCountry.Centroid.Coordinates[0].X,
                 usersCount = byCountry.Userstotal.GetValueOrDefault(),
                 transactionCount = byCountry.Transactioncount.GetValueOrDefault(),
                 noSymptomsCount = byCountry.Nosymptoms.GetValueOrDefault(),
@@ -96,6 +98,52 @@ namespace CovidLAMap.API.ApiModels
             };
             return ret;
         }
+
+        public static CsvAgregationsByCountry From(RegisteredCredential credential)
+        {
+            return new CsvAgregationsByCountry()
+            {
+                type = "pint",
+                lat = credential.Lat,
+                lon = credential.Lon,
+                usersCount = 1,
+                transactionCount = 1, //TODO
+                noSymptomsCount = credential.HasNoSymptoms.GetValueOrDefault() ? 1 : 0,
+                symptomsCount = credential.HasSymptoms.GetValueOrDefault() ? 1 : 0,
+                feverCount = credential.HasFever.GetValueOrDefault() ? 1 : 0,
+                coughCount = credential.HasCought.GetValueOrDefault() ? 1 : 0,
+                breathingIssuesCount = credential.HasBreathingIssues.GetValueOrDefault() ? 1 : 0,
+                lossSmellCount = credential.HasLossSmell.GetValueOrDefault() ? 1 : 0,
+                headacheCount = credential.HasHeadache.GetValueOrDefault() ? 1 : 0,
+                musclePainCount = credential.HasMusclePain.GetValueOrDefault() ? 1 : 0,
+                soreThroatCount = credential.HasSoreThroat.GetValueOrDefault() ? 1 : 0,
+                infectedCount = credential.CredentialType == CredentialType.Infection ? 1 : 0,
+                recoveryCount = credential.CredentialType == CredentialType.Recovery ? 1 : 0,
+                confinedCount = credential.CredentialType == CredentialType.Confinement ? 1 : 0,
+                confinementInterruptionCount = credential.CredentialType == CredentialType.Interruption ? 1 : 0,
+                purchaseFoodCount = credential.Reason == InterruptionReason.Food ? 1 : 0,
+                workCount = credential.Reason == InterruptionReason.Work ? 1 : 0,
+                medicinesCount = credential.Reason == InterruptionReason.Medicines ? 1 : 0,
+                doctorCount = credential.Reason == InterruptionReason.Doctor ? 1 : 0,
+                movingCount = credential.Reason == InterruptionReason.Moving ? 1 : 0,
+                assistCount = credential.Reason == InterruptionReason.Assist ? 1 : 0,
+                financialCount = credential.Reason == InterruptionReason.Financial ? 1 : 0,
+                forceCount = credential.Reason == InterruptionReason.Force ? 1 : 0,
+                petsCount = credential.Reason == InterruptionReason.Pets ? 1 : 0,
+                maleCount = credential.Sex == Sex.Male ? 1 : 0,
+                femaleCount = credential.Sex == Sex.Female ? 1 : 0,
+                otherSexCount = credential.Sex == Sex.Other ? 1 : 0,
+                unspecifiedSexCount = credential.Sex == Sex.Unspecified ? 1 : 0,
+                age = credential.Age,
+                form1318Count = credential.Age <= 18 ? 1 : 0,
+                form1930Count = credential.Age > 18 || credential.Age <= 30 ? 1 : 0,
+                form3140Count = credential.Age > 30 || credential.Age <= 40 ? 1 : 0,
+                form4165Count = credential.Age > 40 || credential.Age <= 65 ? 1 : 0,
+                form66Count = credential.Age > 65 ? 1 : 0,
+                hash = credential.HashId,
+                subjectId = credential.SubjectHashId
+            };
+        }
     }
 
     public sealed class CsvAgregationsByCountryMap : ClassMap<CsvAgregationsByCountry>
@@ -103,7 +151,7 @@ namespace CovidLAMap.API.ApiModels
         public CsvAgregationsByCountryMap()
         {
             AutoMap(CultureInfo.InvariantCulture);
-            Map(m => m.longitud).Name("long");
+            Map(m => m.lon).Name("long");
         }
     }
 }

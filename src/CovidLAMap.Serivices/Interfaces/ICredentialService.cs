@@ -11,6 +11,7 @@ namespace CovidLAMap.Services.Interfaces
     {
         Task<IEnumerable<RegisteredCredential>> GetAllAsync();
         Task<IEnumerable<AgregationsByCountry>> GetByCountryAsync();
+        Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms);
         Task ImportAsync(EthEventDTO ethEvent);
         Task RevokeCredential(EthEventDTO ethEvent);
     }
