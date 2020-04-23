@@ -9,59 +9,93 @@ namespace CovidLAMap.Data.Configurations
 {
     public class AgregationsByCountryConfiguration : IEntityTypeConfiguration<AgregationsByCountry>
     {
-        public void Configure(EntityTypeBuilder<AgregationsByCountry> builder)
+        public void Configure(EntityTypeBuilder<AgregationsByCountry> entity)
         {
-            builder.HasNoKey();
+            entity.HasNoKey();
 
-            builder.ToView("agregations_by_country");
+            entity.ToView("agregations_by_country");
 
-            builder.Property(e => e.Assistpeople).HasColumnName("assistpeople");
+            entity.Property(e => e.Age)
+                .HasColumnName("age")
+                .HasColumnType("numeric");
 
-            builder.Property(e => e.Attendancehealthcenter).HasColumnName("attendancehealthcenter");
+            entity.Property(e => e.Assist).HasColumnName("assist");
 
-            builder.Property(e => e.Centroid).HasColumnName("centroid");
+            entity.Property(e => e.Breathingissues).HasColumnName("breathingissues");
 
-            builder.Property(e => e.Commutingfinancial).HasColumnName("commutingfinancial");
+            entity.Property(e => e.Centroid).HasColumnName("centroid");
 
-            builder.Property(e => e.Commutingwork).HasColumnName("commutingwork");
+            entity.Property(e => e.Confinement).HasColumnName("confinement");
 
-            builder.Property(e => e.Confinement).HasColumnName("confinement");
+            entity.Property(e => e.Cought).HasColumnName("cought");
 
-            builder.Property(e => e.Female).HasColumnName("female");
+            entity.Property(e => e.Doctor).HasColumnName("doctor");
 
-            builder.Property(e => e.Forcemajeure).HasColumnName("forcemajeure");
+            entity.Property(e => e.Female).HasColumnName("female");
 
-            builder.Property(e => e.Infection).HasColumnName("infection");
+            entity.Property(e => e.Fever).HasColumnName("fever");
 
-            builder.Property(e => e.Interruption).HasColumnName("interruption");
+            entity.Property(e => e.Financial).HasColumnName("financial");
 
-            builder.Property(e => e.Male).HasColumnName("male");
+            entity.Property(e => e.Force).HasColumnName("force");
 
-            builder.Property(e => e.NameEn)
+            entity.Property(e => e.Form1318count).HasColumnName("form1318count");
+
+            entity.Property(e => e.Form1930count).HasColumnName("form1930count");
+
+            entity.Property(e => e.Form3140count).HasColumnName("form3140count");
+
+            entity.Property(e => e.Form4165count).HasColumnName("form4165count");
+
+            entity.Property(e => e.Form66count).HasColumnName("form66count");
+
+            entity.Property(e => e.Hasmusclepain).HasColumnName("hasmusclepain");
+
+            entity.Property(e => e.Headache).HasColumnName("headache");
+
+            entity.Property(e => e.Infection).HasColumnName("infection");
+
+            entity.Property(e => e.Interruption).HasColumnName("interruption");
+
+            entity.Property(e => e.Losssmell).HasColumnName("losssmell");
+
+            entity.Property(e => e.Male).HasColumnName("male");
+
+            entity.Property(e => e.Medicines).HasColumnName("medicines");
+
+            entity.Property(e => e.Moving).HasColumnName("moving");
+
+            entity.Property(e => e.NameEn)
                 .HasColumnName("name_en")
                 .HasMaxLength(44);
 
-            builder.Property(e => e.NameEs)
+            entity.Property(e => e.NameEs)
                 .HasColumnName("name_es")
                 .HasMaxLength(44);
 
-            builder.Property(e => e.NamePt)
+            entity.Property(e => e.NamePt)
                 .HasColumnName("name_pt")
                 .HasMaxLength(43);
 
-            builder.Property(e => e.Other).HasColumnName("other");
+            entity.Property(e => e.Nosymptoms).HasColumnName("nosymptoms");
 
-            builder.Property(e => e.Purchase).HasColumnName("purchase");
+            entity.Property(e => e.Othersex).HasColumnName("othersex");
 
-            builder.Property(e => e.Recovery).HasColumnName("recovery");
+            entity.Property(e => e.Pets).HasColumnName("pets");
 
-            builder.Property(e => e.Returnresidence).HasColumnName("returnresidence");
+            entity.Property(e => e.Recovery).HasColumnName("recovery");
 
-            builder.Property(e => e.Symptoms).HasColumnName("symptoms");
+            entity.Property(e => e.Sorethroat).HasColumnName("sorethroat");
 
-            builder.Property(e => e.Total).HasColumnName("total");
+            entity.Property(e => e.Symptoms).HasColumnName("symptoms");
 
-            builder.Property(e => e.Unspecified).HasColumnName("unspecified");
+            entity.Property(e => e.Transactioncount).HasColumnName("transactioncount");
+
+            entity.Property(e => e.Unspecifiedsex).HasColumnName("unspecifiedsex");
+
+            entity.Property(e => e.Userstotal).HasColumnName("userstotal");
+
+            entity.Property(e => e.Work).HasColumnName("work");
         }
     }
 }

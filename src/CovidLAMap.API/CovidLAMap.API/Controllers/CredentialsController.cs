@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CovidLAMap.API.ApiModels;
+using CovidLAMap.Core.Extensions;
 using CovidLAMap.Core.Models;
 using CovidLAMap.Services.Interfaces;
+using CsvHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
 namespace CovidLAMap.API.Controllers
@@ -17,27 +23,62 @@ namespace CovidLAMap.API.Controllers
 
         private readonly ILogger<EthEventController> _logger;
         private readonly ICredentialService _credentialService;
+        private readonly IDistributedCache _cache;
 
         public CredentialsController(ILogger<EthEventController> logger,
-            ICredentialService credentialService)
+            ICredentialService credentialService, IDistributedCache cache)
         {
             _logger = logger;
             _credentialService = credentialService;
+            _cache = cache;
         }
+
         [HttpGet("ByCountry")]
-        public async Task<ActionResult<IEnumerable<AgregationsByCountry>>> ByCountry()
+        [ResponseCache(Duration = 300)]
+        public async Task<ActionResult> ByCountry()
         {
-            try
+            return await _cache.GetOrSetAsync("byCountry", async () =>
             {
-                var byCountry = await _credentialService.GetByCountryAsync();
-                return Ok(byCountry);
-            }
-            catch (Exception e)
+                try
+                {
+                    var byCountry = await _credentialService.GetByCountryAsync();
+                    return Ok(byCountry);
+                }
+                catch (Exception e)
+                {
+                    var guid = Guid.NewGuid();
+                    _logger.LogError(e, $"Error on Post. Id: {guid}", null);
+                    return StatusCode(500, $"Error Id {guid}");
+                }
+            }, TimeSpan.FromMinutes(5));
+        }
+
+
+        [HttpGet("ByCountryCsv")]
+        [ResponseCache(Duration = 300)]
+        public async Task<ActionResult> ByCountryCsv()
+        {
+            var csv = await _cache.GetOrSetAsync<string>("byCountryCsv", async () =>
             {
-                var guid = Guid.NewGuid();
-                _logger.LogError(e, $"Error on Post. Id: {guid}", null);
-                return StatusCode(500, $"Error Id {guid}");
-            }
+                try
+                {
+                    var byCountryEnumerable = await _credentialService.GetByCountryAsync();
+                    var csvEnumerable = byCountryEnumerable.Select(x => CsvAgregationsByCountry.From(x));
+                    using var writer = new StringWriter();
+                    using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+                    csv.Configuration.RegisterClassMap<CsvAgregationsByCountryMap>();
+                    csv.WriteRecords(csvEnumerable);
+                    var finalCsv = writer.ToString();
+                    return finalCsv;
+                }
+                catch (Exception e)
+                {
+                    var guid = Guid.NewGuid();
+                    _logger.LogError(e, $"Error on Post. Id: {guid}", null);
+                    return $"Error Id {guid}";
+                }
+            }, TimeSpan.FromMinutes(5));
+            return File(System.Text.Encoding.UTF8.GetBytes(csv), "text/csv", "data.csv");
         }
     }
 }

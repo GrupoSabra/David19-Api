@@ -27,6 +27,7 @@ namespace CovidLAMap.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedMemoryCache();
             services.AddControllers(options => {
                 options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Point)));
                 options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Coordinate)));
@@ -38,6 +39,7 @@ namespace CovidLAMap.API
                     options.SerializerSettings.Converters.Add(converter);
                 }
             }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            
             services.SetupDependecies(Configuration);
         }
 

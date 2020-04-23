@@ -10,44 +10,45 @@ namespace CovidLAMap.Data.Configurations
 {
     public class RegisteredCredentialConfiguration : IEntityTypeConfiguration<RegisteredCredential>
     {
-        public void Configure(EntityTypeBuilder<RegisteredCredential> builder)
+        public void Configure(EntityTypeBuilder<RegisteredCredential> entity)
         {
-            builder.HasKey(e => e.HashId);
+            entity.HasKey(e => e.HashId);
 
-            builder.HasIndex(e => e.CountryGid)
+            entity.HasIndex(e => e.CountryGid)
                 .HasName("fki_InCountry");
 
-            builder.HasIndex(e => e.StateGid)
+            entity.HasIndex(e => e.StateGid)
                 .HasName("fki_InState");
 
-            builder.HasIndex(e => e.SubjectHashId)
+            entity.HasIndex(e => new { e.IsRevoked, e.SubjectHashId })
                 .HasName("SubjectIdIdx")
-                .HasOperators(new[] { "text_pattern_ops" });
+                .HasCollation(new[] { null, "C.UTF-8" })
+                .HasOperators(new[] { null, "varchar_ops" });
 
-            builder.Property(e => e.CountryGid).HasColumnName("CountryGId");
+            entity.Property(e => e.CountryGid).HasColumnName("CountryGId");
 
-            builder.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-            builder.Property(e => e.Location).HasColumnType("geometry(Point)");
+            entity.Property(e => e.Location).HasColumnType("geometry(Point)");
 
-            builder.Property(e => e.StateGid).HasColumnName("StateGId");
+            entity.Property(e => e.StateGid).HasColumnName("StateGId");
 
-            builder.Property(e => e.SubjectHashId).IsRequired();
+            entity.Property(e => e.SubjectHashId).IsRequired();
 
-            builder.HasOne(d => d.Country)
+            entity.HasOne(d => d.Country)
                 .WithMany(p => p.RegisteredCredentials)
                 .HasForeignKey(d => d.CountryGid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("InCountry");
 
-            builder.HasOne(d => d.State)
+            entity.HasOne(d => d.State)
                 .WithMany(p => p.RegisteredCredentials)
                 .HasForeignKey(d => d.StateGid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("InState");
 
 
-            builder.ToTable("RegisteredCredentials");
+            entity.ToTable("RegisteredCredentials");
         }
     }
 }
