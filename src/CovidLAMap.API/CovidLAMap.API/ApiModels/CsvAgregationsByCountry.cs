@@ -17,6 +17,7 @@ namespace CovidLAMap.API.ApiModels
         public double lon { get; set; }
         public long usersCount { get; set; }
         public long transactionCount { get; set; }
+        public long healthyCount { get; set; }
         public long noSymptomsCount { get; set; }
         public long symptomsCount { get; set; }
         public long feverCount { get; set; }
@@ -61,6 +62,7 @@ namespace CovidLAMap.API.ApiModels
                 lon = byCountry.Centroid.Coordinates[0].X,
                 usersCount = byCountry.Userstotal.GetValueOrDefault(),
                 transactionCount = byCountry.Transactioncount.GetValueOrDefault(),
+                healthyCount = byCountry.Healthy.GetValueOrDefault(),
                 noSymptomsCount = byCountry.Nosymptoms.GetValueOrDefault(),
                 symptomsCount = byCountry.Symptoms.GetValueOrDefault(),
                 feverCount = byCountry.Fever.GetValueOrDefault(),
@@ -74,7 +76,7 @@ namespace CovidLAMap.API.ApiModels
                 recoveryCount = byCountry.Recovery.GetValueOrDefault(),
                 confinedCount = byCountry.Infection.GetValueOrDefault(),
                 confinementInterruptionCount = byCountry.Interruption.GetValueOrDefault(),
-                purchaseFoodCount = 0, //TODO missing
+                purchaseFoodCount = byCountry.food.GetValueOrDefault(),
                 workCount = byCountry.Work.GetValueOrDefault(),
                 medicinesCount = byCountry.Medicines.GetValueOrDefault(),
                 doctorCount = byCountry.Doctor.GetValueOrDefault(),
@@ -103,13 +105,14 @@ namespace CovidLAMap.API.ApiModels
         {
             return new CsvAgregationsByCountry()
             {
-                type = "pint",
+                type = "point",
                 lat = credential.Lat,
                 lon = credential.Lon,
                 usersCount = 1,
                 transactionCount = 1, //TODO
                 noSymptomsCount = credential.HasNoSymptoms.GetValueOrDefault() ? 1 : 0,
                 symptomsCount = credential.HasSymptoms.GetValueOrDefault() ? 1 : 0,
+                healthyCount = credential.HasNoSymptoms.GetValueOrDefault() ? 1 : 0, //TODO
                 feverCount = credential.HasFever.GetValueOrDefault() ? 1 : 0,
                 coughCount = credential.HasCought.GetValueOrDefault() ? 1 : 0,
                 breathingIssuesCount = credential.HasBreathingIssues.GetValueOrDefault() ? 1 : 0,

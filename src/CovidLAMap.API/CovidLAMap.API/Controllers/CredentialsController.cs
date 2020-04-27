@@ -61,12 +61,7 @@ namespace CovidLAMap.API.Controllers
                 try
                 {
                     var byCountryEnumerable = await _credentialService.GetByCountryAsync();
-                    var csvEnumerable = byCountryEnumerable.Select(x => CsvAgregationsByCountry.From(x));
-                    using var writer = new StringWriter();
-                    using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-                    csv.Configuration.RegisterClassMap<CsvAgregationsByCountryMap>();
-                    csv.WriteRecords(csvEnumerable);
-                    var finalCsv = writer.ToString();
+                    var finalCsv = ToCsv(byCountryEnumerable);
                     return finalCsv;
                 }
                 catch (Exception e)
@@ -87,6 +82,12 @@ namespace CovidLAMap.API.Controllers
             {
                 if(queryCredentials.Lat.HasValue && queryCredentials.Lon.HasValue && queryCredentials.Radius.HasValue)
                 {
+                    if(queryCredentials.aggregated.HasValue && queryCredentials.aggregated.Value == true)
+                    {
+                        var aggregatedList = _credentialService.GetPointsInCircleAggregated(queryCredentials.Lat.Value, queryCredentials.Lon.Value, queryCredentials.Radius.Value);
+                        return Ok(aggregatedList);
+                    }
+
                     var list = await _credentialService.GetPointsInCircle(queryCredentials.Lat.Value, queryCredentials.Lon.Value, queryCredentials.Radius.Value);
                     return Ok(list);
                 }
@@ -109,17 +110,19 @@ namespace CovidLAMap.API.Controllers
             {
                 if (queryCredentials.Lat.HasValue && queryCredentials.Lon.HasValue && queryCredentials.Radius.HasValue)
                 {
+                    if (queryCredentials.aggregated.HasValue && queryCredentials.aggregated.Value == true)
+                    {
+                        var aggregatedList = await _credentialService.GetPointsInCircleAggregated(queryCredentials.Lat.Value, queryCredentials.Lon.Value, queryCredentials.Radius.Value);
+                        string csv = ToCsv(aggregatedList);
+                        return File(System.Text.Encoding.UTF8.GetBytes(csv), "text/csv", "data.csv");
+                    }
+
                     (double, double)? ageRange = queryCredentials.Filter.Age != null && queryCredentials.Filter.Age.Length > 1 ?
-                        (double.Parse(queryCredentials.Filter.Age[0]), double.Parse(queryCredentials.Filter.Age[1])) : default((double,double)?);
+                        (double.Parse(queryCredentials.Filter.Age[0]), double.Parse(queryCredentials.Filter.Age[1])) : default((double, double)?);
                     var list = await _credentialService.GetPointsInCircle(queryCredentials.Lat.Value,
                         queryCredentials.Lon.Value, queryCredentials.Radius.Value, queryCredentials.Filter.Country,
                          queryCredentials.Filter.State, ageRange, queryCredentials.Filter.Sex);
-                    var csvEnumerable = list.Select(x => CsvAgregationsByCountry.From(x));
-                    using var writer = new StringWriter();
-                    using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-                    csv.Configuration.RegisterClassMap<CsvAgregationsByCountryMap>();
-                    csv.WriteRecords(csvEnumerable);
-                    var finalCsv = writer.ToString();
+                    string finalCsv = ToCsv(list);
                     return File(System.Text.Encoding.UTF8.GetBytes(finalCsv), "text/csv", "data.csv");
                 }
 
@@ -131,6 +134,26 @@ namespace CovidLAMap.API.Controllers
                 _logger.LogError(e, $"Error on Post. Id: {guid}", null);
                 return StatusCode(500, $"Error Id {guid}");
             }
+        }
+
+        private static string ToCsv(IEnumerable<RegisteredCredential> list)
+        {
+            var csvEnumerable = list.Select(x => CsvAgregationsByCountry.From(x));
+            using var writer = new StringWriter();
+            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csv.Configuration.RegisterClassMap<CsvAgregationsByCountryMap>();
+            csv.WriteRecords(csvEnumerable);
+            return writer.ToString();
+        }
+
+        private static string ToCsv(IEnumerable<AgregationsByCountry> list)
+        {
+            var csvEnumerable = list.Select(x => CsvAgregationsByCountry.From(x));
+            using var writer = new StringWriter();
+            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csv.Configuration.RegisterClassMap<CsvAgregationsByCountryMap>();
+            csv.WriteRecords(csvEnumerable);
+            return writer.ToString();
         }
     }
 }

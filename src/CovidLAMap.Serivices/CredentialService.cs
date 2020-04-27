@@ -59,6 +59,11 @@ namespace CovidLAMap.Services
             return await covidUnitOfWork.Credentials.GetAllAsync();
         }
 
+        public async Task<IEnumerable<AgregationsByCountry>> GetPointsInCircleAggregated(double lat, double lon, double radiusKms)
+        {
+            return await covidUnitOfWork.Credentials.GetPointsInCircleAgregated(lat, lon, radiusKms);
+        }
+
         public async Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms)
         {
             return await covidUnitOfWork.Credentials.GetPointsInCircle(lat, lon, radiusKms);
@@ -67,8 +72,9 @@ namespace CovidLAMap.Services
         public async Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms,
             string country = "", string state = "", (double, double)? ageRange = null, Sex? sex = null)
         {
-            if (string.IsNullOrEmpty(country) && string.IsNullOrEmpty(country) && !ageRange.HasValue && !sex.HasValue)
+            if (string.IsNullOrEmpty(country) && string.IsNullOrEmpty(state) && !ageRange.HasValue && !sex.HasValue) 
                 return await GetPointsInCircle(lat, lon, radiusKms);
+            
             return await covidUnitOfWork.Credentials
                 .GetPointsInCircle(lat, lon, radiusKms, country, state, ageRange, sex);
         }

@@ -12,6 +12,7 @@ namespace CovidLAMap.Core.Models
         public Geometry Centroid { get; set; }
         public long? Userstotal { get; set; }
         public long? Transactioncount { get; set; }
+        public long? Healthy { get; set; }
         public long? Nosymptoms { get; set; }
         public long? Symptoms { get; set; }
         public long? Fever { get; set; }
@@ -25,6 +26,7 @@ namespace CovidLAMap.Core.Models
         public long? Recovery { get; set; }
         public long? Confinement { get; set; }
         public long? Interruption { get; set; }
+        public long? food { get; set; }
         public long? Work { get; set; }
         public long? Medicines { get; set; }
         public long? Doctor { get; set; }

@@ -13,6 +13,7 @@ namespace CovidLAMap.Data
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<RegisteredCredential> RegisteredCredentials { get; set; }
         public virtual DbSet<State> States { get; set; }
+        public virtual DbSet<AgregationsByCountry> CountryAgregations { get; set; }
 
         public CovidDbContext(DbContextOptions<CovidDbContext> options) : base(options)
         {

@@ -56,6 +56,7 @@ namespace CovidLAMap.Data.Configurations
             entity.Property(e => e.Infection).HasColumnName("infection");
 
             entity.Property(e => e.Interruption).HasColumnName("interruption");
+            entity.Property(e => e.food).HasColumnName("food");
 
             entity.Property(e => e.Losssmell).HasColumnName("losssmell");
 
@@ -78,6 +79,7 @@ namespace CovidLAMap.Data.Configurations
                 .HasMaxLength(43);
 
             entity.Property(e => e.Nosymptoms).HasColumnName("nosymptoms");
+            entity.Property(e => e.Healthy).HasColumnName("healthy");
 
             entity.Property(e => e.Othersex).HasColumnName("othersex");
 

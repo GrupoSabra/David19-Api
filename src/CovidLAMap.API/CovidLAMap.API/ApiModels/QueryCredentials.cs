@@ -11,6 +11,7 @@ namespace CovidLAMap.API.ApiModels
         public FilterCredentials Filter { get; set; }
         public double? Lat { get; set; }
         public double? Lon { get; set; }
+        public bool? aggregated { get; set; }
         /// <summary>
         /// In Kms
         /// </summary>
