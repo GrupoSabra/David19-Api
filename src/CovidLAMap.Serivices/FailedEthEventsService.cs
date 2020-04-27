@@ -13,9 +13,9 @@ namespace CovidLAMap.Services
     public class FailedEthEventsService : IFailedEthEventsService
     {
         private readonly ICovidUnitOfWork covidUnitOfWork;
-        private readonly ILogger logger;
+        private readonly ILogger<FailedEthEventsService> logger;
 
-        public FailedEthEventsService(ICovidUnitOfWork covidUnitOfWork, ILogger logger)
+        public FailedEthEventsService(ICovidUnitOfWork covidUnitOfWork, ILogger<FailedEthEventsService> logger)
         {
             this.covidUnitOfWork = covidUnitOfWork;
             this.logger = logger;
@@ -23,7 +23,7 @@ namespace CovidLAMap.Services
 
         public async Task<bool> CheckMaxFailedTimes(EthEventDTO eventDto, int maxTimes =3)
         {
-            var eventDB = await covidUnitOfWork.EthEvents.GetByIdAsync(eventDto.Id);
+            var eventDB = await covidUnitOfWork.EthEvents.GetFullById(eventDto.Id);
             if(eventDB == null)
             {
                 await covidUnitOfWork.EthEvents.AddAsync(eventDto);
@@ -33,9 +33,9 @@ namespace CovidLAMap.Services
             
             if(eventDB.IndexedParameters[0].Value == eventDto.IndexedParameters[0].Value)
             {
+                eventDB.FailedTimes++;
                 if (eventDB.FailedTimes >= maxTimes) return true;
 
-                eventDB.FailedTimes++;
                 covidUnitOfWork.EthEvents.Update(eventDB);
                 await covidUnitOfWork.CommitAsync();
                 return false;

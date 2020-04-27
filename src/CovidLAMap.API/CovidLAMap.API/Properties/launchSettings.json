@@ -21,9 +21,9 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/credentials/ByCountry",
-      "httPort": 32773,
-      "useSSL": false
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "useSSL": false,
+      "httPort": 32773
     },
     "IIS Express": {
       "commandName": "IISExpress",

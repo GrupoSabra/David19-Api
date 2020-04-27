@@ -1,4 +1,5 @@
-﻿using CovidLAMap.Core.Models;
+﻿using CovidLAMap.Core.DTOs;
+using CovidLAMap.Core.Models;
 using CovidLAMap.Data.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -14,6 +15,7 @@ namespace CovidLAMap.Data
         public virtual DbSet<RegisteredCredential> RegisteredCredentials { get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<AgregationsByCountry> CountryAgregations { get; set; }
+        public virtual DbSet<EthEventDTO> EthEvents { get; set; }
 
         public CovidDbContext(DbContextOptions<CovidDbContext> options) : base(options)
         {

@@ -44,9 +44,9 @@ namespace CovidLAMap.Services
             if (credential != null)
             {
                 credential.IsRevoked = true;
+                covidUnitOfWork.Credentials.Update(credential);
+                await covidUnitOfWork.CommitAsync();
             }
-            covidUnitOfWork.Credentials.Update(credential);
-            await covidUnitOfWork.CommitAsync();
         }
 
         public async Task<IEnumerable<AgregationsByCountry>> GetByCountryAsync()

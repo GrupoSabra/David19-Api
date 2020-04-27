@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CovidLAMap.API</name>
+    </assembly>
+    <members>
+        <member name="P:CovidLAMap.API.ApiModels.QueryCredentials.Radius">
+            <summary>
+            In Kms
+            </summary>
+        </member>
+        <member name="P:CovidLAMap.API.ApiModels.FilterCredentials.Age">
+            <summary>
+            From lower to higher. Example from 20 years to 30 years: [20, 30]
+            </summary>
+        </member>
+    </members>
+</doc>

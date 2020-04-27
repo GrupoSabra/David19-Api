@@ -11,6 +11,7 @@ namespace CovidLAMap.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class EthController : ControllerBase
     {
 
@@ -49,7 +50,7 @@ namespace CovidLAMap.API.Controllers
             catch (Exception e)
             {
                 ///Since Eventum if failed keep trying, no more than 3 times
-                if (! await _failedEthEventsService.CheckMaxFailedTimes(eventDTO))
+                if (! await CheckEventIsNotInALoop(eventDTO))
                 {
                     var guid = Guid.NewGuid();
                     _logger.LogError(e, $"Error on Post. Id: {guid}", eventDTO);
