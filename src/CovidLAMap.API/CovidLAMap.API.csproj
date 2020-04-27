@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Dev\Git\covid-la-map\src\CovidLAMap.API\CovidLAMap.API\CovidLAMap.API.xml</DocumentationFile>
+    <DocumentationFile>C:\Dev\Git\covid-la-map\src\CovidLAMap.API\CovidLAMap.API.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
@@ -30,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CovidLAMap.Core\CovidLAMap.Core.csproj" />
-    <ProjectReference Include="..\..\CovidLAMap.Serivices\CovidLAMap.Services.csproj" />
+    <ProjectReference Include="..\CovidLAMap.Core\CovidLAMap.Core.csproj" />
+    <ProjectReference Include="..\CovidLAMap.Serivices\CovidLAMap.Services.csproj" />
   </ItemGroup>
 
 
