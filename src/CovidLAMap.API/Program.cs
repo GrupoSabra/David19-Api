@@ -16,8 +16,12 @@ namespace CovidLAMap.API
 {
     public class Program
     {
+        private const string CONFIG_ENV_VAR_PREFIX = "DAVID19_API_";
+        private static IConfigurationRoot config;
+
         public static int Main(string[] args)
         {
+            CreateConfig(args);
             CreateLogger();
             try
             {
@@ -25,7 +29,7 @@ namespace CovidLAMap.API
                 CreateHostBuilder(args).Build().Run();
                 return 0;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Fatal(ex, "Host terminated unexpectedly");
                 return 1;
@@ -38,17 +42,21 @@ namespace CovidLAMap.API
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args).UseSerilog()
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddEnvironmentVariables(CONFIG_ENV_VAR_PREFIX);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseKestrel(options =>
+                    {
+                        options.AddServerHeader = false;
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
 
         private static void CreateLogger()
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true)
-                .Build();
             var connectionstring = config.GetConnectionString("Default");
             string tableName = "logs";
             IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
@@ -69,6 +77,13 @@ namespace CovidLAMap.API
            .Enrich.FromLogContext()
            .WriteTo.PostgreSQL(connectionstring, tableName, columnWriters, needAutoCreateTable: true)
            .CreateLogger();
+        }
+
+        private static void CreateConfig(string[] args)
+        {
+            config = new ConfigurationBuilder()
+                            .AddCommandLine(args)
+                            .Build();
         }
     }
 }
