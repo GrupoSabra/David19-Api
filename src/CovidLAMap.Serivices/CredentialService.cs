@@ -21,7 +21,7 @@ namespace CovidLAMap.Services
         public async Task ImportAsync(EthEventDTO ethEvent)
         {
             var credential = RegisteredCredential.From(ethEvent);
-            try 
+            try
             {
                 var country = await this.covidUnitOfWork.Countries.SingleOrDefaultAsync(x => x.Geom.Contains(credential.Location));
                 var state = await this.covidUnitOfWork.States.SingleOrDefaultAsync(x => x.Geom.Contains(credential.Location));
@@ -41,7 +41,7 @@ namespace CovidLAMap.Services
             var hash = ethEvent.IndexedParameters[0].Value.ToString();
             var credential = await covidUnitOfWork.Credentials
                 .SingleOrDefaultAsync(x => x.HashId == hash);
-            if(credential != null)
+            if (credential != null)
             {
                 credential.IsRevoked = true;
             }
@@ -59,10 +59,20 @@ namespace CovidLAMap.Services
             return await covidUnitOfWork.Credentials.GetAllAsync();
         }
 
-        public async Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms) 
+        public async Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms)
         {
             return await covidUnitOfWork.Credentials.GetPointsInCircle(lat, lon, radiusKms);
         }
-    
+
+        public async Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms,
+            string country = "", string state = "", (double, double)? ageRange = null, Sex? sex = null)
+        {
+            if (string.IsNullOrEmpty(country) && string.IsNullOrEmpty(country) && !ageRange.HasValue && !sex.HasValue)
+                return await GetPointsInCircle(lat, lon, radiusKms);
+            return await covidUnitOfWork.Credentials
+                .GetPointsInCircle(lat, lon, radiusKms, country, state, ageRange, sex);
+        }
+
+
     }
 }

@@ -21,12 +21,13 @@ namespace CovidLAMap.Core.DTOs
         public string EventSpecificationSignature { get; set; }
         public string NetworkName { get; set; }
         public string Id { get; set; }
+        public int FailedTimes {get; set;}
     }
 
     public class EthValueDTO
     {
         public long Id { get; set; }
         public string Type { get; set; }
-        public object Value { get; set; }
+        public string Value { get; set; }
     }
 }

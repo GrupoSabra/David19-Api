@@ -8,13 +8,13 @@ using System.Text;
 
 namespace CovidLAMap.Data
 {
-    public class CovidDbContext : DbContext
+    public class CovidDbContext2 : DbContext
     {
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<RegisteredCredential> RegisteredCredentials { get; set; }
         public virtual DbSet<State> States { get; set; }
 
-        public CovidDbContext(DbContextOptions<CovidDbContext> options) : base(options)
+        public CovidDbContext2(DbContextOptions<CovidDbContext2> options) : base(options)
         {
         }
 
@@ -25,6 +25,7 @@ namespace CovidLAMap.Data
             modelBuilder.ApplyConfiguration(new CountriesConfiguration());
             modelBuilder.ApplyConfiguration(new StatesConfiguration());
             modelBuilder.ApplyConfiguration(new AgregationsByCountryConfiguration());
+            modelBuilder.ApplyConfiguration(new EthEventConfiguration());
         }  
     }
 }

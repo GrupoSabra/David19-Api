@@ -1,7 +1,9 @@
 ﻿using CovidLAMap.Core.DTOs;
+using CovidLAMap.Core.Tools;
 using Geohash;
 using NetTopologySuite.Geometries;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,32 +46,32 @@ namespace CovidLAMap.Core.Models
             var ret = new RegisteredCredential()
             {
                 IsRevoked = false,
-                HashId = eventDto.IndexedParameters[0].Value.ToString(),
-                CitizenAddress = eventDto.NonIndexedParameters[0].Value.ToString(),
-                SubjectHashId = eventDto.NonIndexedParameters[1].Value.ToString(),
-                StartDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(eventDto.NonIndexedParameters[2].Value.ToString())).DateTime.ToUniversalTime(),
-                CredentialCreation = DateTimeOffset.FromUnixTimeSeconds(long.Parse(eventDto.NonIndexedParameters[3].Value.ToString())).DateTime.ToUniversalTime(),
-                Sex = Enum.Parse<Sex>(eventDto.NonIndexedParameters[4].Value.ToString()),
-                Age = short.Parse(eventDto.NonIndexedParameters[5].Value.ToString()),
-                CredentialType = Enum.Parse<CredentialType>(eventDto.NonIndexedParameters[7].Value.ToString()),
-                Reason = Enum.Parse<InterruptionReason>(eventDto.NonIndexedParameters[8].Value.ToString())
+                HashId = eventDto.IndexedParameters[0].Value,
+                CitizenAddress = eventDto.NonIndexedParameters[0].Value,
+                SubjectHashId = eventDto.NonIndexedParameters[1].Value,
+                StartDate = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(eventDto.NonIndexedParameters[2].Value)).DateTime.ToUniversalTime(),
+                CredentialCreation = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(eventDto.NonIndexedParameters[3].Value)).DateTime.ToUniversalTime(),
+                Sex = Enum.Parse<Sex>(eventDto.NonIndexedParameters[4].Value),
+                Age = short.Parse(eventDto.NonIndexedParameters[5].Value),
+                CredentialType = Enum.Parse<CredentialType>(eventDto.NonIndexedParameters[7].Value),
+                Reason = Enum.Parse<InterruptionReason>(eventDto.NonIndexedParameters[8].Value)
             };
 
-            
             var hasher = new Geohasher();
-            var decoded = hasher.Decode(eventDto.NonIndexedParameters[6].Value.ToString());
+            var hash = Hex.HexToString(eventDto.NonIndexedParameters[6].Value);
+            var decoded = hasher.Decode(hash);
             ret.Location = new Point(decoded.Item2, decoded.Item1);
             ret.Lat = ret.Location.Coordinate.X;
             ret.Lon = ret.Location.Coordinate.Y;
-            SetSymptoms(ret, eventDto.NonIndexedParameters[9].Value.ToString());
+            SetSymptoms(ret, eventDto.NonIndexedParameters[9].Value);
             return ret;
         }
 
-        private static void SetSymptoms(RegisteredCredential ret, string bits)
+        private static void SetSymptoms(RegisteredCredential ret, string hex)
         {
             if (ret.CredentialType != CredentialType.Symptoms) return;
-            var bytesR = bits.ToCharArray();
-            if(bytesR[0] == '0')
+            var byteR = Hex.HexToBinary(hex).ToCharArray();
+            if(byteR[0] == '0')
             {
                 ret.HasNoSymptoms = true;
                 return;
@@ -78,13 +80,13 @@ namespace CovidLAMap.Core.Models
             {
                 ret.HasSymptoms = true;
             }
-            if (bytesR[1] == '1') ret.HasFever = true;
-            if (bytesR[2] == '1') ret.HasCought = true;
-            if (bytesR[3] == '1') ret.HasBreathingIssues = true;
-            if (bytesR[4] == '1') ret.HasLossSmell = true;
-            if (bytesR[5] == '1') ret.HasHeadache = true;
-            if (bytesR[6] == '1') ret.HasMusclePain = true;
-            if (bytesR[7] == '1') ret.HasSoreThroat = true;
+            if (byteR[1] == '1') ret.HasFever = true;
+            if (byteR[2] == '1') ret.HasCought = true;
+            if (byteR[3] == '1') ret.HasBreathingIssues = true;
+            if (byteR[4] == '1') ret.HasLossSmell = true;
+            if (byteR[5] == '1') ret.HasHeadache = true;
+            if (byteR[6] == '1') ret.HasMusclePain = true;
+            if (byteR[7] == '1') ret.HasSoreThroat = true;
         }
     }
 
@@ -115,7 +117,8 @@ namespace CovidLAMap.Core.Models
         Assist=5,
         Financial =6,
         Force=7,
-        Pets=8
+        Pets=8,
+        Other = 9
     }
 
 }

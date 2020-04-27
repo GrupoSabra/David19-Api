@@ -10,7 +10,7 @@ namespace CovidLAMap.Data.Repositories
 {
     public class AgregationsByCountryRepository : Repository<AgregationsByCountry>, IAgregationsByCountryRepository
     {
-        public AgregationsByCountryRepository(CovidDbContext context) : base(context)
+        public AgregationsByCountryRepository(CovidDbContext2 context) : base(context)
         {
 
         }

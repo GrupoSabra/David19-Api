@@ -10,7 +10,7 @@ namespace CovidLAMap.Data
 {
     public class CovidUnitOfWork : ICovidUnitOfWork
     {
-        private readonly CovidDbContext context;
+        private readonly CovidDbContext2 context;
         private RegisteredCredentialRepository credentialsRepository;
         private CountryRepository countryRepository;
         private StateRepository stateRepository;
@@ -21,7 +21,7 @@ namespace CovidLAMap.Data
         public IStateRepository States => stateRepository ??= new StateRepository(context);
         public IAgregationsByCountryRepository CountryAgregations => agregationsByCountry ??= new AgregationsByCountryRepository(context); 
 
-        public CovidUnitOfWork(CovidDbContext context)
+        public CovidUnitOfWork(CovidDbContext2 context)
         {
             this.context = context;
         }

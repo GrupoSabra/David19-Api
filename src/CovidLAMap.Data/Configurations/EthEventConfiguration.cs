@@ -1,4 +1,5 @@
-﻿using CovidLAMap.Core.Models;
+﻿using CovidLAMap.Core.DTOs;
+using CovidLAMap.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -7,15 +8,15 @@ using System.Text;
 
 namespace CovidLAMap.Data.Configurations
 {
-    //public class EthEventConfiguration : IEntityTypeConfiguration<EthEvent>
-    //{
+    public class EthEventConfiguration : IEntityTypeConfiguration<EthEventDTO>
+    {
 
-    //    public void Configure(EntityTypeBuilder<EthEvent> builder)
-    //    {
-    //        //builder.HasKey(x => x.Id);
-    //        //builder.Property(x => x.Id).UseIdentityColumn();
+        public void Configure(EntityTypeBuilder<EthEventDTO> builder)
+        {
+            builder.HasKey(x => x.Id);
 
-    //        //builder.ToTable("EthEvents");
-    //    }
-    //}
+
+            builder.ToTable("EthEvents");
+        }
+    }
 }

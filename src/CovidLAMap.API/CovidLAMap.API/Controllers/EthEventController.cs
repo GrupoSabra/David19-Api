@@ -11,22 +11,23 @@ namespace CovidLAMap.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class EthEventController : ControllerBase
+    public class EthController : ControllerBase
     {
 
-        private readonly ILogger<EthEventController> _logger;
+        private readonly ILogger<EthController> _logger;
         private readonly ICredentialService _credentialService;
 
-        public EthEventController(ILogger<EthEventController> logger, 
+        public EthController(ILogger<EthController> logger, 
             ICredentialService credentialService)
         {
             _logger = logger;
             _credentialService = credentialService;
         }
 
-        [HttpPost]
+        [HttpPost("event")]
         public async Task<ActionResult> Post(EthEventDTO eventDTO)
         {
+            if (eventDTO == null || eventDTO.Status != "CONFIRMED") return Ok();
             try
             {
                 var name = eventDTO.Name.ToLowerInvariant();
@@ -49,8 +50,18 @@ namespace CovidLAMap.API.Controllers
                 _logger.LogError(e, $"Error on Post. Id: {guid}", eventDTO);
                 return StatusCode(500, $"Error Id {guid}");
             }
-            
-            
+        }
+
+        [HttpPost("all-events")]
+        public ActionResult AllEvents()
+        {
+            return Ok();
+        }
+
+        [HttpPost("all-blocks")]
+        public ActionResult AllBlocks()
+        {
+            return Ok();
         }
     }
 }

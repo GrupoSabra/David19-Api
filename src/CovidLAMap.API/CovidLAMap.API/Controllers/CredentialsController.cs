@@ -20,11 +20,11 @@ namespace CovidLAMap.API.Controllers
     [ApiController]
     public class CredentialsController : ControllerBase
     {
-        private readonly ILogger<EthEventController> _logger;
+        private readonly ILogger<CredentialsController> _logger;
         private readonly ICredentialService _credentialService;
         private readonly IDistributedCache _cache;
 
-        public CredentialsController(ILogger<EthEventController> logger,
+        public CredentialsController(ILogger<CredentialsController> logger,
             ICredentialService credentialService, IDistributedCache cache)
         {
             _logger = logger;
@@ -109,7 +109,11 @@ namespace CovidLAMap.API.Controllers
             {
                 if (queryCredentials.Lat.HasValue && queryCredentials.Lon.HasValue && queryCredentials.Radius.HasValue)
                 {
-                    var list = await _credentialService.GetPointsInCircle(queryCredentials.Lat.Value, queryCredentials.Lon.Value, queryCredentials.Radius.Value);
+                    (double, double)? ageRange = queryCredentials.Filter.Age != null && queryCredentials.Filter.Age.Length > 1 ?
+                        (double.Parse(queryCredentials.Filter.Age[0]), double.Parse(queryCredentials.Filter.Age[1])) : default((double,double)?);
+                    var list = await _credentialService.GetPointsInCircle(queryCredentials.Lat.Value,
+                        queryCredentials.Lon.Value, queryCredentials.Radius.Value, queryCredentials.Filter.Country,
+                         queryCredentials.Filter.State, ageRange, queryCredentials.Filter.Sex);
                     var csvEnumerable = list.Select(x => CsvAgregationsByCountry.From(x));
                     using var writer = new StringWriter();
                     using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);

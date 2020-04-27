@@ -20,8 +20,8 @@ namespace CovidLAMap.API.ApiModels
     public class FilterCredentials
     {
         public string Country { get; set; }
-        public string City { get; set; }
-        public string Age { get; set; }
+        public string State { get; set; }
+        public string[] Age { get; set; }
         public Sex Sex { get; set; }
     }
 }
