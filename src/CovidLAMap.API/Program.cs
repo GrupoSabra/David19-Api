@@ -72,10 +72,9 @@ namespace CovidLAMap.API
             };
 
             Log.Logger = new LoggerConfiguration()
-           .MinimumLevel.Warning()
-           .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
            .Enrich.FromLogContext()
-           .WriteTo.PostgreSQL(connectionstring, tableName, columnWriters, needAutoCreateTable: true)
+           .WriteTo.Console(LogEventLevel.Information)
+           .WriteTo.PostgreSQL(connectionstring, tableName, columnWriters, LogEventLevel.Warning, needAutoCreateTable: true)
            .CreateLogger();
         }
 
