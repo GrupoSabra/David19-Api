@@ -15,7 +15,7 @@ namespace CovidLAMap.Data
         {
             services.AddTransient<ICovidUnitOfWork, CovidUnitOfWork>();
             
-            services.AddDbContext<CovidDbContext2>(options =>
+            services.AddDbContext<CovidDbContext>(options =>
                options.UseNpgsql(configuration.GetConnectionString("Default"),
               x => { 
                   x.MigrationsAssembly("CovidLAMap.Data");

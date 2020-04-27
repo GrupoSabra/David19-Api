@@ -10,18 +10,20 @@ namespace CovidLAMap.Data
 {
     public class CovidUnitOfWork : ICovidUnitOfWork
     {
-        private readonly CovidDbContext2 context;
-        private RegisteredCredentialRepository credentialsRepository;
-        private CountryRepository countryRepository;
-        private StateRepository stateRepository;
-        private AgregationsByCountryRepository agregationsByCountry;
+        private readonly CovidDbContext context;
+        private IRegisteredCredentialRepository credentialsRepository;
+        private ICountryRepository countryRepository;
+        private IStateRepository stateRepository;
+        private IAgregationsByCountryRepository agregationsByCountry;
+        private IEthEventRepository ethEventRepository;
 
         public IRegisteredCredentialRepository Credentials => credentialsRepository ??= new RegisteredCredentialRepository(context);
         public ICountryRepository Countries => countryRepository ??= new CountryRepository(context);
         public IStateRepository States => stateRepository ??= new StateRepository(context);
-        public IAgregationsByCountryRepository CountryAgregations => agregationsByCountry ??= new AgregationsByCountryRepository(context); 
+        public IAgregationsByCountryRepository CountryAgregations => agregationsByCountry ??= new AgregationsByCountryRepository(context);
+        public IEthEventRepository EthEvents => ethEventRepository ??= new EthEventRepository(context);
 
-        public CovidUnitOfWork(CovidDbContext2 context)
+        public CovidUnitOfWork(CovidDbContext context)
         {
             this.context = context;
         }

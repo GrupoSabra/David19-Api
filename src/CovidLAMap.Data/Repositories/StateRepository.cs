@@ -10,7 +10,7 @@ namespace CovidLAMap.Data.Repositories
 {
     public class StateRepository : Repository<State>, IStateRepository
     {
-        public StateRepository(CovidDbContext2 context) : base(context)
+        public StateRepository(CovidDbContext context) : base(context)
         {
 
         }

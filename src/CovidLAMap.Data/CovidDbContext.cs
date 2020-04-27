@@ -8,13 +8,13 @@ using System.Text;
 
 namespace CovidLAMap.Data
 {
-    public class CovidDbContext2 : DbContext
+    public class CovidDbContext : DbContext
     {
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<RegisteredCredential> RegisteredCredentials { get; set; }
         public virtual DbSet<State> States { get; set; }
 
-        public CovidDbContext2(DbContextOptions<CovidDbContext2> options) : base(options)
+        public CovidDbContext(DbContextOptions<CovidDbContext> options) : base(options)
         {
         }
 

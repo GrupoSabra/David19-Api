@@ -45,7 +45,7 @@ namespace CovidLAMap.Services
             {
                 credential.IsRevoked = true;
             }
-            covidUnitOfWork.Credentials.UpdateAsync(credential);
+            covidUnitOfWork.Credentials.Update(credential);
             await covidUnitOfWork.CommitAsync();
         }
 

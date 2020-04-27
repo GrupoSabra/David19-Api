@@ -16,6 +16,7 @@ namespace CovidLAMap.Core.Repositories
         Task AddRangeAsync(IEnumerable<TEntity> entities);
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entities);
-        void UpdateAsync(TEntity entity);
+        void Update(TEntity entity);
+        Task<TEntity> GetByIdAsync(string id);
     }
 }

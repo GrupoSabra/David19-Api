@@ -17,6 +17,7 @@ namespace CovidLAMap.Services
             services.SetupDataDependencies(configuration);
             services.AddHttpClient<IGeoService, GeoService>();
             services.AddTransient<ICredentialService, CredentialService>();
+            services.AddTransient<IFailedEthEventsService, FailedEthEventsService>();
         }
     }
 }

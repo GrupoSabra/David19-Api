@@ -15,7 +15,6 @@ namespace CovidLAMap.Data.Configurations
         {
             builder.HasKey(x => x.Id);
 
-
             builder.ToTable("EthEvents");
         }
     }

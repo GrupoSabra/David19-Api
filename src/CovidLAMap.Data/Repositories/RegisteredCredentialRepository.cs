@@ -19,9 +19,9 @@ namespace CovidLAMap.Data.Repositories
 {
     public class RegisteredCredentialRepository : Repository<RegisteredCredential>, IRegisteredCredentialRepository
     {
-        private readonly CovidDbContext2 context;
+        private readonly CovidDbContext context;
 
-        public RegisteredCredentialRepository(CovidDbContext2 context) : base(context)
+        public RegisteredCredentialRepository(CovidDbContext context) : base(context)
         {
             this.context = context;
         }

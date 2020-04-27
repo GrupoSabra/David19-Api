@@ -43,6 +43,11 @@ namespace CovidLAMap.Data.Repositories
             return Context.Set<TEntity>().FindAsync(id).AsTask();
         }
 
+        public Task<TEntity> GetByIdAsync(string id)
+        {
+            return Context.Set<TEntity>().FindAsync(id).AsTask();
+        }
+
         public void Remove(TEntity entity)
         {
             Context.Set<TEntity>().Remove(entity);
@@ -58,7 +63,7 @@ namespace CovidLAMap.Data.Repositories
             return Context.Set<TEntity>().SingleOrDefaultAsync(predicate);
         }
 
-        public void UpdateAsync(TEntity entity)
+        public void Update(TEntity entity)
         {
             Context.Update<TEntity>(entity);
         }

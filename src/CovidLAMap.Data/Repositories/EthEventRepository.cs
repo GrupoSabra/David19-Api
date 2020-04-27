@@ -1,4 +1,5 @@
-﻿using CovidLAMap.Core.Models;
+﻿using CovidLAMap.Core.DTOs;
+using CovidLAMap.Core.Models;
 using CovidLAMap.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace CovidLAMap.Data.Repositories
 {
-    public class AgregationsByCountryRepository : Repository<AgregationsByCountry>, IAgregationsByCountryRepository
+    public class EthEventRepository : Repository<EthEventDTO>, IEthEventRepository
     {
-        public AgregationsByCountryRepository(CovidDbContext context) : base(context)
+        public EthEventRepository(CovidDbContext context) : base(context)
         {
 
         }

@@ -16,12 +16,14 @@ namespace CovidLAMap.API.Controllers
 
         private readonly ILogger<EthController> _logger;
         private readonly ICredentialService _credentialService;
+        private readonly IFailedEthEventsService _failedEthEventsService;
 
         public EthController(ILogger<EthController> logger, 
-            ICredentialService credentialService)
+            ICredentialService credentialService, IFailedEthEventsService failedEthEventsService)
         {
             _logger = logger;
             _credentialService = credentialService;
+            _failedEthEventsService = failedEthEventsService;
         }
 
         [HttpPost("event")]
@@ -46,9 +48,30 @@ namespace CovidLAMap.API.Controllers
             }
             catch (Exception e)
             {
-                var guid = Guid.NewGuid();
-                _logger.LogError(e, $"Error on Post. Id: {guid}", eventDTO);
-                return StatusCode(500, $"Error Id {guid}");
+                ///Since Eventum if failed keep trying, no more than 3 times
+                if (! await _failedEthEventsService.CheckMaxFailedTimes(eventDTO))
+                {
+                    var guid = Guid.NewGuid();
+                    _logger.LogError(e, $"Error on Post. Id: {guid}", eventDTO);
+                    return StatusCode(500, $"Error Id {guid}");
+                }
+                {
+                    _logger.LogCritical(e, "EthEvent is in a loop: ", eventDTO);
+                    return Ok();
+                }
+            }
+        }
+
+        private async Task<bool> CheckEventIsNotInALoop(EthEventDTO eventDTO)
+        {
+            try
+            {
+                return await _failedEthEventsService.CheckMaxFailedTimes(eventDTO);
+            }
+            catch(Exception e)
+            {
+                _logger.LogCritical(e, "EthEvent is trap: ", eventDTO);
+                return true;
             }
         }
 
