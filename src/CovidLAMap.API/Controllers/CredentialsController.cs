@@ -9,6 +9,7 @@ using CovidLAMap.Core.Extensions;
 using CovidLAMap.Core.Models;
 using CovidLAMap.Services.Interfaces;
 using CsvHelper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;

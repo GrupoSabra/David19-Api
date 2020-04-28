@@ -62,6 +62,7 @@ namespace CovidLAMap.API
         {
             app.UseSerilogRequestLogging();
             app.UseSwagger();
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "David19 API");
             });
@@ -81,13 +82,8 @@ namespace CovidLAMap.API
             {
                 endpoints.MapControllers();
             });
-            
-            app.UseCors(builder =>
-            {
-                builder.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-            });
+
+
         }
     }
 }
