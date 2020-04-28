@@ -1,5 +1,3 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
@@ -7,8 +5,12 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY . .
+COPY ["CovidLAMap.API/CovidLAMap.API.csproj", "CovidLAMap.API/"]
+COPY ["CovidLAMap.Serivices/CovidLAMap.Services.csproj", "CovidLAMap.Serivices/"]
+COPY ["CovidLAMap.Data/CovidLAMap.Data.csproj", "CovidLAMap.Data/"]
+COPY ["CovidLAMap.Core/CovidLAMap.Core.csproj", "CovidLAMap.Core/"]
 RUN dotnet restore "CovidLAMap.API/CovidLAMap.API.csproj"
+COPY . .
 WORKDIR "/src/CovidLAMap.API"
 RUN dotnet build "CovidLAMap.API.csproj" -c Release -o /app/build
 

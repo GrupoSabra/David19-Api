@@ -13,6 +13,9 @@ namespace CovidLAMap.API.ApiModels
     public class CsvAgregationsByCountry
     {
         public string type { get; set; }
+        public string name_es { get; set; }
+        public string name_pt { get; set; }
+        public string name_en { get; set; }
         public double lat { get; set; }
         public double lon { get; set; }
         public long usersCount { get; set; }
@@ -58,6 +61,9 @@ namespace CovidLAMap.API.ApiModels
             var ret = new CsvAgregationsByCountry
             {
                 type = "cluster",
+                name_en = byCountry.NameEn,
+                name_es = byCountry.NameEs,
+                name_pt = byCountry.NamePt,
                 lat = byCountry.Centroid.Coordinates[0].Y,
                 lon = byCountry.Centroid.Coordinates[0].X,
                 usersCount = byCountry.Userstotal.GetValueOrDefault(),
@@ -106,6 +112,9 @@ namespace CovidLAMap.API.ApiModels
             return new CsvAgregationsByCountry()
             {
                 type = "point",
+                name_es = string.Empty,
+                name_pt = string.Empty,
+                name_en =  string.Empty,
                 lat = credential.Lat,
                 lon = credential.Lon,
                 usersCount = 1,
