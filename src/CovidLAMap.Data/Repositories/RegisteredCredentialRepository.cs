@@ -54,25 +54,25 @@ namespace CovidLAMap.Data.Repositories
             var nextCounter = 3;
             if (!string.IsNullOrEmpty(country))
             {
-                query += $"and c.iso_n3 = '{nextCounter}' ";
+                query += $"and c.iso_n3 = '{{{nextCounter}}}'";
                 nextCounter++;
                 argsList.Add(country);
             }
             if (!string.IsNullOrEmpty(state))
             {
-                query += $"and s.iso_3166_2 = '{nextCounter}' ";
+                query += $"and s.iso_3166_2 = '{{{nextCounter}}}' ";
                 nextCounter++;
                 argsList.Add(state);
             }
             if(sex != null)
             {
-                query += $"and \"Sex\" = {nextCounter} ";
+                query += $"and \"Sex\" = {{{nextCounter}}}";
                 nextCounter++;
                 argsList.Add((int)sex);
             }
             if (ageRange.HasValue)
             {
-                query += $"and \"Age\" >= {nextCounter} and \"Age\" < {nextCounter++}";
+                query += $"and \"Age\" >= {{{nextCounter}}} and \"Age\" < {{{nextCounter}}}";
                 argsList.Add(ageRange.Value.Item1);
                 argsList.Add(ageRange.Value.Item2);
             }
