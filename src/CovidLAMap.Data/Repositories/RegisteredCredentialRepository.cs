@@ -29,8 +29,8 @@ namespace CovidLAMap.Data.Repositories
         public async Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms)
         {
             return await context.RegisteredCredentials.FromSqlRaw(
-             "select * from \"RegisteredCredentials\" where ST_Distance(ST_Transform(ST_SetSRID(\"Location\", 4326), 26986)," +
-                "ST_Transform(ST_SetSRID(ST_POINT({0}, {1}), 4326), 26986)) / 1000 < {2}",
+             "select * from \"RegisteredCredentials\" as rc where ST_Distance(ST_Transform(ST_SetSRID(\"Location\", 4326), 26986)," +
+                "ST_Transform(ST_SetSRID(ST_POINT({0}, {1}), 4326), 26986)) / 1000 < {2} and (rc.\"IsRevoked\" IS NULL OR rc.\"IsRevoked\" = false)",
                  lat, lon, radiusKms
             ).ToListAsync();
         }
@@ -38,7 +38,7 @@ namespace CovidLAMap.Data.Repositories
         public async Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms,
             string country = "", string state = "", (double, double)? ageRange = null, Sex? sex = null)
         {
-            var query = "select * from \"RegisteredCredentials\" ";
+            var query = "select * from \"RegisteredCredentials\" as rc ";
 
             if (!string.IsNullOrEmpty(country))
             {
@@ -49,18 +49,18 @@ namespace CovidLAMap.Data.Repositories
                 query += "join \"States\" as s on s.gid = \"StateGId\" ";
             }
             query += "where ST_Distance(ST_Transform(ST_SetSRID(\"Location\", 4326), 26986)," +
-                "ST_Transform(ST_SetSRID(ST_POINT({0}, {1}), 4326), 26986)) / 1000 < {2} ";
+                "ST_Transform(ST_SetSRID(ST_POINT({0}, {1}), 4326), 26986)) / 1000 < {2} and (rc.\"IsRevoked\" IS NULL OR rc.\"IsRevoked\" = false) ";
             List<object> argsList = new List<object>() { lat, lon, radiusKms };
             var nextCounter = 3;
             if (!string.IsNullOrEmpty(country))
             {
-                query += $"and c.iso_n3 = '{{{nextCounter}}}'";
+                query += $"and c.iso_n3 = {{{nextCounter}}}";
                 nextCounter++;
                 argsList.Add(country);
             }
             if (!string.IsNullOrEmpty(state))
             {
-                query += $"and s.iso_3166_2 = '{{{nextCounter}}}' ";
+                query += $"and s.iso_3166_2 = {{{nextCounter}}} ";
                 nextCounter++;
                 argsList.Add(state);
             }

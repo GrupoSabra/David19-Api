@@ -34,7 +34,7 @@ namespace CovidLAMap.API.Controllers
         }
 
         [HttpGet("ByCountry")]
-        [ResponseCache(Duration = 300)]
+        [ResponseCache(Duration = 10)] //Todo
         public async Task<ActionResult> ByCountry()
         {
             return await _cache.GetOrSetAsync("byCountry", async () =>
@@ -50,11 +50,11 @@ namespace CovidLAMap.API.Controllers
                     _logger.LogError(e, $"Error on Post. Id: {guid}", null);
                     return StatusCode(500, $"Error Id {guid}");
                 }
-            }, TimeSpan.FromMinutes(5));
+            }, TimeSpan.FromSeconds(10));
         }
 
         [HttpGet("ByCountryCsv")]
-        [ResponseCache(Duration = 300)]
+        [ResponseCache(Duration = 10)] //TODO config
         public async Task<ActionResult> ByCountryCsv()
         {
             var csv = await _cache.GetOrSetAsync<string>("byCountryCsv", async () =>
@@ -71,12 +71,12 @@ namespace CovidLAMap.API.Controllers
                     _logger.LogError(e, $"Error on Post. Id: {guid}", null);
                     return $"Error Id {guid}";
                 }
-            }, TimeSpan.FromMinutes(5));
+            }, TimeSpan.FromSeconds(10)); //TODO config
             return File(System.Text.Encoding.UTF8.GetBytes(csv), "text/csv", "data.csv");
         }
 
         [HttpPost("query")]
-        [ResponseCache(Duration = 300)]
+        [ResponseCache(Duration = 10)]
         public async Task<ActionResult> Query(QueryCredentials queryCredentials)
         {
             return await QueryCredentials(queryCredentials); //TODO cache 
@@ -121,7 +121,7 @@ namespace CovidLAMap.API.Controllers
         }
 
         [HttpPost("querycsv")]
-        [ResponseCache(Duration = 300)]
+        [ResponseCache(Duration = 10)]
         public async Task<ActionResult> QueryCsv(QueryCredentials queryCredentials)
         {
             try //TODO Cache
