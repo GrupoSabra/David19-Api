@@ -87,7 +87,7 @@ namespace CovidLAMap.API
                             .SetBasePath(Directory.GetCurrentDirectory())
                             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                             .AddJsonFile($"appsettings.{env}.json", optional: true)
-                            .AddEnvironmentVariables()
+                            .AddEnvironmentVariables(CONFIG_ENV_VAR_PREFIX)
                             .AddCommandLine(args)
                             .Build();
         }
