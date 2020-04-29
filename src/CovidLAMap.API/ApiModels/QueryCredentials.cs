@@ -26,7 +26,7 @@ namespace CovidLAMap.API.ApiModels
         /// From lower to higher. Example from 20 years to 30 years: [20, 30]
         /// </summary>
         public int[] Age { get; set; }
-        public Sex Sex { get; set; }
+        public Sex? Sex { get; set; }
 
         public (double, double)? AgeToTuple()
         {

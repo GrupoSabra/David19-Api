@@ -73,14 +73,21 @@ namespace CovidLAMap.API
 
             Log.Logger = new LoggerConfiguration()
            .Enrich.FromLogContext()
-           .WriteTo.Console(LogEventLevel.Information)
            .WriteTo.PostgreSQL(connectionstring, tableName, columnWriters, LogEventLevel.Warning, needAutoCreateTable: true)
+           .WriteTo.Console(LogEventLevel.Information)
            .CreateLogger();
+           Log.Information($"connection string: {connectionstring}");
         }
 
         private static void CreateConfig(string[] args)
         {
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            env = string.IsNullOrEmpty(env) ? string.Empty : env;
             config = new ConfigurationBuilder()
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                            .AddJsonFile($"appsettings.{env}.json", optional: true)
+                            .AddEnvironmentVariables()
                             .AddCommandLine(args)
                             .Build();
         }

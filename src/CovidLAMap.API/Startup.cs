@@ -82,8 +82,6 @@ namespace CovidLAMap.API
             {
                 endpoints.MapControllers();
             });
-
-
         }
     }
 }

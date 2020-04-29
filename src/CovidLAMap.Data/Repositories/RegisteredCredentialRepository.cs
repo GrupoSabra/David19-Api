@@ -51,24 +51,28 @@ namespace CovidLAMap.Data.Repositories
             query += "where ST_Distance(ST_Transform(ST_SetSRID(\"Location\", 4326), 26986)," +
                 "ST_Transform(ST_SetSRID(ST_POINT({0}, {1}), 4326), 26986)) / 1000 < {2} ";
             List<object> argsList = new List<object>() { lat, lon, radiusKms };
+            var nextCounter = 3;
             if (!string.IsNullOrEmpty(country))
             {
-                query += "and c.iso_n3 = '{country}' ";
+                query += $"and c.iso_n3 = '{nextCounter}' ";
+                nextCounter++;
                 argsList.Add(country);
             }
             if (!string.IsNullOrEmpty(state))
             {
-                query += "and s.iso_3166_2 = '{state}' ";
+                query += $"and s.iso_3166_2 = '{nextCounter}' ";
+                nextCounter++;
                 argsList.Add(state);
             }
             if(sex != null)
             {
-                query += "and \"Sex\" = {sex} ";
+                query += $"and \"Sex\" = {nextCounter} ";
+                nextCounter++;
                 argsList.Add((int)sex);
             }
             if (ageRange.HasValue)
             {
-                query += "and \"Age\" >= {min} and \"Age\" < {max}";
+                query += $"and \"Age\" >= {nextCounter} and \"Age\" < {nextCounter++}";
                 argsList.Add(ageRange.Value.Item1);
                 argsList.Add(ageRange.Value.Item2);
             }
