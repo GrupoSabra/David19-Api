@@ -62,14 +62,16 @@ namespace CovidLAMap.API
         {
             var elasticSection = config.GetSection("Elastic");
             var elasticUri = new Uri(elasticSection.GetValue<string>("url"));
+            var user = elasticSection.GetValue<string>("user");
+            var pass = elasticSection.GetValue<string>("password");
+            var index = elasticSection.GetValue<string>("index");
 
             Log.Logger = new LoggerConfiguration()
            .Enrich.FromLogContext()
            .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(elasticUri)
            {
-               ModifyConnectionSettings = x=> 
-               x.BasicAuthentication(elasticSection.GetValue<string>("user"), elasticSection.GetValue<string>("password")),
-               IndexFormat= elasticSection.GetValue<string>("index"),
+               ModifyConnectionSettings = x=> x.BasicAuthentication(user, pass),
+               IndexFormat= index,
                TemplateName= "DavidTemplate",
                AutoRegisterTemplate = true,
                AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
@@ -85,6 +87,8 @@ namespace CovidLAMap.API
            })
            .WriteTo.Console(LogEventLevel.Information)
            .CreateLogger();
+
+            Log.Information($"Elastic uri:  {elasticUri}  - user: {user} - index: {index}");
         }
 
         private static void CreateConfig(string[] args)

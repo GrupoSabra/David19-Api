@@ -34,7 +34,7 @@ namespace CovidLAMap.API.Controllers
         }
 
         [HttpGet("ByCountry")]
-        [ResponseCache(Duration = 300)] //Todo
+        [ResponseCache(Duration = 60)] //Todo
         public async Task<ActionResult> ByCountry()
         {
             return await _cache.GetOrSetAsync("byCountry", async () =>
@@ -50,11 +50,11 @@ namespace CovidLAMap.API.Controllers
                     _logger.LogError(e, $"Error on Post. Id: {guid}", null);
                     return StatusCode(500, $"Error Id {guid}");
                 }
-            }, TimeSpan.FromSeconds(300));
+            }, TimeSpan.FromSeconds(60));
         }
 
         [HttpGet("ByCountryCsv")]
-        [ResponseCache(Duration = 300)] //TODO config
+        [ResponseCache(Duration = 60)] //TODO config
         public async Task<ActionResult> ByCountryCsv()
         {
             var csv = await _cache.GetOrSetAsync<string>("byCountryCsv", async () =>
@@ -71,12 +71,12 @@ namespace CovidLAMap.API.Controllers
                     _logger.LogError(e, $"Error on Post. Id: {guid}", null);
                     return $"Error Id {guid}";
                 }
-            }, TimeSpan.FromSeconds(300)); //TODO config
+            }, TimeSpan.FromSeconds(60)); //TODO config
             return File(System.Text.Encoding.UTF8.GetBytes(csv), "text/csv", "data.csv");
         }
 
         [HttpPost("query")]
-        [ResponseCache(Duration = 300)]
+        [ResponseCache(Duration = 60)]
         public async Task<ActionResult> Query(QueryCredentials queryCredentials)
         {
             return await QueryCredentials(queryCredentials); //TODO cache 
@@ -91,7 +91,9 @@ namespace CovidLAMap.API.Controllers
                     if (queryCredentials.Radius.Value <= 0) return StatusCode(422, "Radius cannot be 0 or less");
                     if (queryCredentials.Aggregated.HasValue && queryCredentials.Aggregated.Value == true)
                     {
-                        var aggregatedList = await _credentialService.GetPointsInCircleAggregated(queryCredentials.Lat.Value, queryCredentials.Lon.Value, queryCredentials.Radius.Value);
+                        var aggregatedList = await _credentialService.GetPointsInCircleAggregated(queryCredentials.Lat.Value,
+                        queryCredentials.Lon.Value, queryCredentials.Radius.Value, queryCredentials.Filter?.Country,
+                         queryCredentials.Filter?.State, queryCredentials.Filter?.AgeToTuple(), queryCredentials.Filter?.Sex);
                         return Ok(aggregatedList);
                     }
 
@@ -121,7 +123,7 @@ namespace CovidLAMap.API.Controllers
         }
 
         [HttpPost("querycsv")]
-        [ResponseCache(Duration = 300)]
+        [ResponseCache(Duration = 60)]
         public async Task<ActionResult> QueryCsv(QueryCredentials queryCredentials)
         {
             try //TODO Cache
@@ -131,7 +133,9 @@ namespace CovidLAMap.API.Controllers
                     if (queryCredentials.Radius.Value <= 0) return StatusCode(422, "Radius cannot be 0 or less");
                     if (queryCredentials.Aggregated.HasValue && queryCredentials.Aggregated.Value == true)
                     {
-                        var aggregatedList = await _credentialService.GetPointsInCircleAggregated(queryCredentials.Lat.Value, queryCredentials.Lon.Value, queryCredentials.Radius.Value);
+                        var aggregatedList = await _credentialService.GetPointsInCircleAggregated(queryCredentials.Lat.Value,
+                        queryCredentials.Lon.Value, queryCredentials.Radius.Value, queryCredentials.Filter?.Country,
+                         queryCredentials.Filter?.State, queryCredentials.Filter?.AgeToTuple(), queryCredentials.Filter?.Sex);
                         string csv = ToCsv(aggregatedList);
                         return File(System.Text.Encoding.UTF8.GetBytes(csv), "text/csv", "data.csv");
                     }
