@@ -10,6 +10,9 @@ using Microsoft.Extensions.Logging;
 using NpgsqlTypes;
 using Serilog;
 using Serilog.Events;
+using Serilog.Formatting.Json;
+using Serilog.Sinks.Elasticsearch;
+using Serilog.Sinks.File;
 using Serilog.Sinks.PostgreSQL;
 
 namespace CovidLAMap.API
@@ -57,26 +60,27 @@ namespace CovidLAMap.API
 
         private static void CreateLogger()
         {
-            var connectionstring = config.GetConnectionString("Default");
-            string tableName = "logs";
-            IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
-            {
-                {"message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
-                {"message_template", new MessageTemplateColumnWriter(NpgsqlDbType.Text) },
-                {"level", new LevelColumnWriter(true, NpgsqlDbType.Varchar) },
-                {"raise_date", new TimestampColumnWriter(NpgsqlDbType.Timestamp) },
-                {"exception", new ExceptionColumnWriter(NpgsqlDbType.Text) },
-                {"properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
-                {"props_test", new PropertiesColumnWriter(NpgsqlDbType.Jsonb) },
-                {"machine_name", new SinglePropertyColumnWriter("MachineName", PropertyWriteMethod.ToString, NpgsqlDbType.Text, "l") }
-            };
+            var elasticSection = config.GetSection("Elastic");
+            var elasticUri = new Uri(elasticSection.GetValue<string>("url"));
 
             Log.Logger = new LoggerConfiguration()
            .Enrich.FromLogContext()
-           .WriteTo.PostgreSQL(connectionstring, tableName, columnWriters, LogEventLevel.Warning, needAutoCreateTable: true)
+           .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(elasticUri)
+           {
+               ModifyConnectionSettings = x=> 
+               x.BasicAuthentication(elasticSection.GetValue<string>("user"), elasticSection.GetValue<string>("password")),
+               
+               FailureCallback = e => { 
+                   Console.WriteLine("Unable to submit event " + e.MessageTemplate); 
+               },
+               
+               EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog |
+                                       EmitEventFailureHandling.WriteToFailureSink |
+                                       EmitEventFailureHandling.RaiseCallback,
+               FailureSink = new FileSink("./failures.txt", new JsonFormatter(), null)
+           })
            .WriteTo.Console(LogEventLevel.Information)
            .CreateLogger();
-           Log.Information($"connection string: {connectionstring}");
         }
 
         private static void CreateConfig(string[] args)
