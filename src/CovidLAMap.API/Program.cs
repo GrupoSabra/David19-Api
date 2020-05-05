@@ -69,7 +69,10 @@ namespace CovidLAMap.API
            {
                ModifyConnectionSettings = x=> 
                x.BasicAuthentication(elasticSection.GetValue<string>("user"), elasticSection.GetValue<string>("password")),
-               
+               IndexFormat= elasticSection.GetValue<string>("index"),
+               TemplateName= "DavidTemplate",
+               AutoRegisterTemplate = true,
+               AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
                FailureCallback = e => { 
                    Console.WriteLine("Unable to submit event " + e.MessageTemplate); 
                },
@@ -77,7 +80,8 @@ namespace CovidLAMap.API
                EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog |
                                        EmitEventFailureHandling.WriteToFailureSink |
                                        EmitEventFailureHandling.RaiseCallback,
-               FailureSink = new FileSink("./failures.txt", new JsonFormatter(), null)
+               FailureSink = new FileSink("./failures.txt", new JsonFormatter(), null),
+               MinimumLogEventLevel = LogEventLevel.Information
            })
            .WriteTo.Console(LogEventLevel.Information)
            .CreateLogger();
