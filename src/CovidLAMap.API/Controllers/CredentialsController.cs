@@ -86,17 +86,17 @@ namespace CovidLAMap.API.Controllers
         {
             try
             {
+                if (queryCredentials.Aggregated.HasValue && queryCredentials.Aggregated.Value == true)
+                {
+                    var aggregatedList = await _credentialService.GetPointsInCircleAggregated(queryCredentials.Lat.GetValueOrDefault(),
+                    queryCredentials.Lon.GetValueOrDefault(), queryCredentials.Radius.GetValueOrDefault(), queryCredentials.Filter?.Country,
+                     queryCredentials.Filter?.State, queryCredentials.Filter?.AgeToTuple(), queryCredentials.Filter?.Sex);
+                    return Ok(aggregatedList);
+                }
+
                 if (queryCredentials.Lat.HasValue && queryCredentials.Lon.HasValue && queryCredentials.Radius.HasValue)
                 {
                     if (queryCredentials.Radius.Value <= 0) return StatusCode(422, "Radius cannot be 0 or less");
-                    if (queryCredentials.Aggregated.HasValue && queryCredentials.Aggregated.Value == true)
-                    {
-                        var aggregatedList = await _credentialService.GetPointsInCircleAggregated(queryCredentials.Lat.Value,
-                        queryCredentials.Lon.Value, queryCredentials.Radius.Value, queryCredentials.Filter?.Country,
-                         queryCredentials.Filter?.State, queryCredentials.Filter?.AgeToTuple(), queryCredentials.Filter?.Sex);
-                        return Ok(aggregatedList);
-                    }
-
                     if (queryCredentials.Filter != null)
                     {
                         var list = await _credentialService.GetPointsInCircle(queryCredentials.Lat.Value,

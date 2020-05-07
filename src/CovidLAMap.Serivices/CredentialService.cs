@@ -59,7 +59,7 @@ namespace CovidLAMap.Services
             return await covidUnitOfWork.Credentials.GetAllAsync();
         }
 
-        public async Task<IEnumerable<AgregationsByCountry>> GetPointsInCircleAggregated(double lat, double lon, double radiusKms,
+        public async Task<IEnumerable<AgregationsByCountry>> GetPointsInCircleAggregated(double? lat, double? lon, double? radiusKms,
             string country = "", string state = "", (double, double)? ageRange = null, Sex? sex = null)
         {
             return await covidUnitOfWork.Credentials.GetPointsInCircleAgregated(lat, lon, radiusKms, country, state, ageRange, sex);
