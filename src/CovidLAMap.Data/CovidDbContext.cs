@@ -15,6 +15,7 @@ namespace CovidLAMap.Data
         public virtual DbSet<RegisteredCredential> RegisteredCredentials { get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<AgregationsByCountry> CountryAgregations { get; set; }
+        public virtual DbSet<AgregationsByType> TypeAgregations { get; set; }
         public virtual DbSet<EthEventDTO> EthEvents { get; set; }
 
         public CovidDbContext(DbContextOptions<CovidDbContext> options) : base(options)
@@ -29,6 +30,7 @@ namespace CovidLAMap.Data
             modelBuilder.ApplyConfiguration(new StatesConfiguration());
             modelBuilder.ApplyConfiguration(new AgregationsByCountryConfiguration());
             modelBuilder.ApplyConfiguration(new EthEventConfiguration());
+            modelBuilder.ApplyConfiguration(new AgregationsByTypeConfiguration());
         }  
     }
 }

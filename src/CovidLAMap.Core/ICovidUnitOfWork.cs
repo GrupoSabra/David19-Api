@@ -12,5 +12,6 @@ namespace CovidLAMap.Core
         IStateRepository States { get; }
         IAgregationsByCountryRepository CountryAgregations { get; }
         IEthEventRepository EthEvents { get; }
+        IAgregationsByTypeRepository TypeAgregations { get; }
     }
 }

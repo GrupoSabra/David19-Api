@@ -80,6 +80,14 @@ namespace CovidLAMap.Services
                 .GetPointsInCircle(lat, lon, radiusKms, country, state, ageRange, sex);
         }
 
+        public async Task<IEnumerable<AgregationsByType>> GetByTypeAsync()
+        {
+            return await covidUnitOfWork.TypeAgregations.GetAllAsync();
+        }
 
+        public async Task<IEnumerable<AgregationsByType>> GetByTypeAsync(HealthStatus status)
+        {
+            return await covidUnitOfWork.TypeAgregations.GetByStatus(status);
+        }
     }
 }

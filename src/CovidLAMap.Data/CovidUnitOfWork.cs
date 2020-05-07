@@ -11,6 +11,7 @@ namespace CovidLAMap.Data
     public class CovidUnitOfWork : ICovidUnitOfWork
     {
         private readonly CovidDbContext context;
+        private IAgregationsByTypeRepository typeAgregations;
         private IRegisteredCredentialRepository credentialsRepository;
         private ICountryRepository countryRepository;
         private IStateRepository stateRepository;
@@ -22,6 +23,7 @@ namespace CovidLAMap.Data
         public IStateRepository States => stateRepository ??= new StateRepository(context);
         public IAgregationsByCountryRepository CountryAgregations => agregationsByCountry ??= new AgregationsByCountryRepository(context);
         public IEthEventRepository EthEvents => ethEventRepository ??= new EthEventRepository(context);
+        public IAgregationsByTypeRepository TypeAgregations => typeAgregations ??= new AgregationsByTypeRepository(context); 
 
         public CovidUnitOfWork(CovidDbContext context)
         {

@@ -167,6 +167,24 @@ namespace CovidLAMap.API.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="byType">
+        /// Infected = 0,
+        /// Healthy = 1,
+        /// Symtomps = 2,
+        /// Recovered = 3
+        /// </param>
+        /// <returns></returns>
+        [HttpGet("ByHealthStatus")]
+        [ResponseCache(Duration = 60)]
+        public async Task<ActionResult> ByType(HealthStatus byType)
+        {
+            var result = await _credentialService.GetByTypeAsync(byType);
+            return Ok(result);
+        }
+
         private static string ToCsv(IEnumerable<RegisteredCredential> list)
         {
             var csvEnumerable = list.Select(x => CsvAgregationsByCountry.From(x));

@@ -11,6 +11,8 @@ namespace CovidLAMap.Services.Interfaces
     {
         Task<IEnumerable<RegisteredCredential>> GetAllAsync();
         Task<IEnumerable<AgregationsByCountry>> GetByCountryAsync();
+        Task<IEnumerable<AgregationsByType>> GetByTypeAsync();
+        Task<IEnumerable<AgregationsByType>> GetByTypeAsync(HealthStatus status);
         Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms);
         Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms, string country = "", string state = "", (double, double)? ageRange = null, Sex? sex = null);
         Task<IEnumerable<AgregationsByCountry>> GetPointsInCircleAggregated(double? lat, double? lon, double? radiusKms, string country = "", string state = "", (double, double)? ageRange = null, Sex? sex = null);
