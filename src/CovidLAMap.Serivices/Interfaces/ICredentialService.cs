@@ -9,6 +9,7 @@ namespace CovidLAMap.Services.Interfaces
 {
     public interface ICredentialService
     {
+        Task<IEnumerable<AgregationsByCountry>> ClusteredCredentials(double lat, double lon, double radiusKms, double clusterRaidusKms, (double, double)? ageRange = null, Sex? sex = null);
         Task<IEnumerable<RegisteredCredential>> GetAllAsync();
         Task<IEnumerable<AgregationsByCountry>> GetByCountryAsync();
         Task<IEnumerable<AgregationsByType>> GetByTypeAsync();

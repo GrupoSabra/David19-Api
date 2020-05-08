@@ -70,6 +70,12 @@ namespace CovidLAMap.Services
             return await covidUnitOfWork.Credentials.GetPointsInCircle(lat, lon, radiusKms);
         }
 
+        public async Task<IEnumerable<AgregationsByCountry>> ClusteredCredentials(double lat, double lon, double radiusKms,
+            double clusterRaidusKms , (double, double)? ageRange = null, Sex? sex = null)
+        {
+            return await covidUnitOfWork.Credentials.ClusteredCredentials(lat, lon, radiusKms, clusterRaidusKms, ageRange, sex);
+        }
+
         public async Task<List<RegisteredCredential>> GetPointsInCircle(double lat, double lon, double radiusKms,
             string country = "", string state = "", (double, double)? ageRange = null, Sex? sex = null)
         {

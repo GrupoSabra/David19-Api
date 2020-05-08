@@ -100,5 +100,21 @@ namespace CovidLAMap.Data.Repositories
                 latp, lonp, radiusP, countryp, statep, ageMinp, ageMaxp, sexp)
                 .ToListAsync();
         }
+
+        public async Task<List<AgregationsByCountry>> ClusteredCredentials(double lat, double lon, double radiusKms,
+            double clusterRaidusKms, (double, double)? ageRange = null, Sex? sex = null)
+        {
+            var ageMinp = new NpgsqlParameter("ageMin", ageRange.HasValue ? (object)ageRange.Value.Item1 : DBNull.Value) { IsNullable = true, DbType = DbType.Int32 };
+            var ageMaxp = new NpgsqlParameter("ageMax", ageRange.HasValue ? (object)ageRange.Value.Item2 : DBNull.Value) { IsNullable = true, DbType = DbType.Int32 };
+            var latp = new NpgsqlParameter("lat", (object)lat) {  DbType = DbType.Double };
+            var lonp = new NpgsqlParameter("lon", (object)lon) {  DbType = DbType.Double };
+            var radiusP = new NpgsqlParameter("radiusKms", (object)radiusKms) { DbType = DbType.Int32 };
+            var clusterRadisup = new NpgsqlParameter("clusterRadius", (object)clusterRaidusKms) { DbType = DbType.Int32 };
+            var sexp = new NpgsqlParameter("sex", sex == null ? DBNull.Value : (object)((int)sex)) { IsNullable = true, DbType = DbType.Int32 };
+            return await context.CountryAgregations.FromSqlRaw
+                ("select * from clustered_credentials({0}, {1}, {2}, {3}, {4}, {5}, {6} )",
+                latp, lonp, radiusP, clusterRadisup, ageMinp, ageMaxp, sexp)
+                .ToListAsync();
+        }
     } 
 }

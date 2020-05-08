@@ -16,6 +16,11 @@ namespace CovidLAMap.API.ApiModels
         /// In Kms
         /// </summary>
         public double? Radius { get; set; }
+        /// <summary>
+        /// are the smaller cluster should be created in the radius. Radius in kms.
+        /// ClusterRadius should be smaller than Radius
+        /// </summary>
+        public double? ClusterRadius { get; set; }
     }
 
     public class FilterCredentials

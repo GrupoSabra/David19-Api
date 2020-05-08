@@ -86,6 +86,16 @@ namespace CovidLAMap.API.Controllers
         {
             try
             {
+
+                if (queryCredentials.Aggregated.HasValue && queryCredentials.Aggregated.Value == true &&
+                    queryCredentials.ClusterRadius.HasValue && queryCredentials.ClusterRadius.Value > 0)
+                {
+                    var aggregatedList = await _credentialService.ClusteredCredentials(queryCredentials.Lat.GetValueOrDefault(),
+                    queryCredentials.Lon.GetValueOrDefault(), queryCredentials.Radius.GetValueOrDefault(), queryCredentials.ClusterRadius.GetValueOrDefault(),
+                    queryCredentials.Filter?.AgeToTuple(), queryCredentials.Filter?.Sex);
+                    return Ok(aggregatedList);
+                }
+
                 if (queryCredentials.Aggregated.HasValue && queryCredentials.Aggregated.Value == true)
                 {
                     var aggregatedList = await _credentialService.GetPointsInCircleAggregated(queryCredentials.Lat.GetValueOrDefault(),
@@ -128,17 +138,29 @@ namespace CovidLAMap.API.Controllers
         {
             try //TODO Cache
             {
+
+                if (queryCredentials.Aggregated.HasValue && queryCredentials.Aggregated.Value == true &&
+                   queryCredentials.ClusterRadius.HasValue && queryCredentials.ClusterRadius.Value > 0)
+                {
+                    var aggregatedList = await _credentialService.ClusteredCredentials(queryCredentials.Lat.GetValueOrDefault(),
+                    queryCredentials.Lon.GetValueOrDefault(), queryCredentials.Radius.GetValueOrDefault(), queryCredentials.ClusterRadius.GetValueOrDefault(),
+                    queryCredentials.Filter?.AgeToTuple(), queryCredentials.Filter?.Sex);
+                    string csv = ToCsv(aggregatedList);
+                    return File(System.Text.Encoding.UTF8.GetBytes(csv), "text/csv", "data.csv");
+                }
+
+                if (queryCredentials.Aggregated.HasValue && queryCredentials.Aggregated.Value == true)
+                {
+                    var aggregatedList = await _credentialService.GetPointsInCircleAggregated(queryCredentials.Lat.Value,
+                    queryCredentials.Lon.Value, queryCredentials.Radius.Value, queryCredentials.Filter?.Country,
+                     queryCredentials.Filter?.State, queryCredentials.Filter?.AgeToTuple(), queryCredentials.Filter?.Sex);
+                    string csv = ToCsv(aggregatedList);
+                    return File(System.Text.Encoding.UTF8.GetBytes(csv), "text/csv", "data.csv");
+                }
+
                 if (queryCredentials.Lat.HasValue && queryCredentials.Lon.HasValue && queryCredentials.Radius.HasValue)
                 {
                     if (queryCredentials.Radius.Value <= 0) return StatusCode(422, "Radius cannot be 0 or less");
-                    if (queryCredentials.Aggregated.HasValue && queryCredentials.Aggregated.Value == true)
-                    {
-                        var aggregatedList = await _credentialService.GetPointsInCircleAggregated(queryCredentials.Lat.Value,
-                        queryCredentials.Lon.Value, queryCredentials.Radius.Value, queryCredentials.Filter?.Country,
-                         queryCredentials.Filter?.State, queryCredentials.Filter?.AgeToTuple(), queryCredentials.Filter?.Sex);
-                        string csv = ToCsv(aggregatedList);
-                        return File(System.Text.Encoding.UTF8.GetBytes(csv), "text/csv", "data.csv");
-                    }
 
                     if(queryCredentials.Filter != null)
                     {
@@ -179,7 +201,7 @@ namespace CovidLAMap.API.Controllers
         /// <returns></returns>
         [HttpGet("ByHealthStatus")]
         [ResponseCache(Duration = 60)]
-        public async Task<ActionResult> ByType(HealthStatus byType)
+        public async Task<ActionResult> ByStatus(HealthStatus byType)
         {
             var result = await _credentialService.GetByTypeAsync(byType);
             return Ok(result);
