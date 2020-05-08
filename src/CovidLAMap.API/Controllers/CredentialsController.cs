@@ -10,6 +10,7 @@ using CovidLAMap.Core.Models;
 using CovidLAMap.Services.Interfaces;
 using CsvHelper;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
@@ -192,18 +193,18 @@ namespace CovidLAMap.API.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="byType">
-        /// Infected = 0,
+        /// <param name="status">Infected = 0,
         /// Healthy = 1,
         /// Symtomps = 2,
-        /// Recovered = 3
-        /// </param>
+        /// Recovered = 3</param>
+        /// <param name="country"></param>
+        /// <param name="state"></param>
         /// <returns></returns>
         [HttpGet("ByHealthStatus")]
         [ResponseCache(Duration = 60)]
-        public async Task<ActionResult> ByStatus(HealthStatus byType)
+        public async Task<ActionResult> ByStatus(HealthStatus status, string country, string state)
         {
-            var result = await _credentialService.GetByTypeAsync(byType);
+            var result = await _credentialService.GetByTypeAsync(status, country, state);
             return Ok(result);
         }
 

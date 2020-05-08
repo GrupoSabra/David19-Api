@@ -6,6 +6,6 @@ namespace CovidLAMap.Core.Repositories
 {
     public interface IAgregationsByTypeRepository : IRepository<AgregationsByType>
     {
-        Task<List<AgregationsByType>> GetByStatus(HealthStatus status, string country = "", string state = "", (double, double)? ageRange = null, Sex? sex = null);
+        Task<List<AgregationsByType>> GetByStatus(HealthStatus status, string country = "", string state = "");
     }
 }

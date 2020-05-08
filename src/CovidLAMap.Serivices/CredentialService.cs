@@ -91,9 +91,9 @@ namespace CovidLAMap.Services
             return await covidUnitOfWork.TypeAgregations.GetAllAsync();
         }
 
-        public async Task<IEnumerable<AgregationsByType>> GetByTypeAsync(HealthStatus status)
+        public async Task<IEnumerable<AgregationsByType>> GetByTypeAsync(HealthStatus status, string country, string state)
         {
-            return await covidUnitOfWork.TypeAgregations.GetByStatus(status);
+            return await covidUnitOfWork.TypeAgregations.GetByStatus(status, country, state);
         }
     }
 }
